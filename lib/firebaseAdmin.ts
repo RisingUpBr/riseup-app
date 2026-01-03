@@ -1,22 +1,17 @@
-import admin from "firebase-admin";
+import * as admin from "firebase-admin";
 import path from "path";
-import fs from "fs";
+
+const serviceAccountPath = path.join(
+  process.cwd(),
+  "secrets",
+  "firebase-service-account.json"
+);
 
 if (!admin.apps.length) {
-  const serviceAccountPath = path.join(
-    process.cwd(),
-    "secrets",
-    "firebase-admin.json"
-  );
-
-  const serviceAccount = JSON.parse(
-    fs.readFileSync(serviceAccountPath, "utf8")
-  );
-
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccountPath),
   });
 }
 
 export const adminAuth = admin.auth();
-export const adminDB = admin.firestore();
+export const adminDb = admin.firestore();
