@@ -1,18 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot, getDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
+import { ensureUserDocument } from "./ensureUserDocument";
+import { normalizeUser } from "./normalizeUser";
 
 export function useAuthUser() {
   const [user, setUser] = useState<User | null>(null);
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  // evita normalizar múltiplas vezes
+  const normalizedRef = useRef(false);
+
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+    let unsubscribeUserSnapshot: (() => void) | null = null;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
+      // 🔴 LOGOUT
       if (!firebaseUser) {
+        if (unsubscribeUserSnapshot) unsubscribeUserSnapshot();
+        normalizedRef.current = false;
         setUser(null);
         setUserData(null);
         setLoading(false);
@@ -21,17 +31,33 @@ export function useAuthUser() {
 
       setUser(firebaseUser);
 
-      const ref = doc(db, "users", firebaseUser.uid);
-      const snap = await getDoc(ref);
+      // 🔥 GARANTE DOCUMENTO BASE
+      await ensureUserDocument(firebaseUser);
 
-      if (snap.exists()) {
-        setUserData(snap.data());
+      const ref = doc(db, "users", firebaseUser.uid);
+
+      // 🔧 NORMALIZA APENAS UMA VEZ
+      if (!normalizedRef.current) {
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          await normalizeUser(firebaseUser.uid, snap.data());
+          normalizedRef.current = true;
+        }
       }
 
-      setLoading(false);
+      // 🔁 SNAPSHOT SOMENTE PARA LEITURA
+      unsubscribeUserSnapshot = onSnapshot(ref, (snap) => {
+        if (snap.exists()) {
+          setUserData(snap.data());
+        }
+        setLoading(false);
+      });
     });
 
-    return () => unsub();
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeUserSnapshot) unsubscribeUserSnapshot();
+    };
   }, []);
 
   return {

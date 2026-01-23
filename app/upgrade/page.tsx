@@ -64,7 +64,7 @@ export default function UpgradePage() {
 
       <br />
 
-      <button onClick={() => router.push("/app")}>
+      <button onClick={() => router.push("/dashboard")}>
         Voltar para o app
       </button>
     </main>

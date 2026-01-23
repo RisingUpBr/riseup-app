@@ -13,21 +13,22 @@ export default function ProdutosClient() {
         Produtos Rise Up
       </h1>
 
-      <p className="text-center text-gray-600 mb-12">
-        Conteúdos criados para gerar clareza, disciplina e evolução real.
-        Escolha o nível que faz sentido para você agora.
+      <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+        Não são atalhos.  
+        São estruturas para quem decidiu parar de viver no automático
+        e começar a agir com clareza, disciplina e consciência.
       </p>
 
       {desconto && (
         <div className="mb-10 text-center text-green-600 font-semibold">
-          🎉 Você tem {desconto} de desconto por ser Premium no App
+          🎉 Você tem {desconto} de desconto por já ser Premium no App
         </div>
       )}
 
       <div className="grid gap-6 md:grid-cols-4">
         <Card
           title="Free"
-          description="Um primeiro passo para clareza e direção"
+          description="Um primeiro passo para sair do automático"
           features={[
             "Conteúdo introdutório",
             "Reflexões essenciais",
@@ -38,40 +39,40 @@ export default function ProdutosClient() {
         />
 
         <Card
-          title="Essencial"
-          description="Para quem decidiu sair da estagnação"
+          title="Básico"
+          description="Para quem percebeu que algo precisa mudar"
           features={[
-            "Mentalidade correta",
-            "Disciplina prática",
-            "Base sólida de crescimento",
+            "Clareza mental",
+            "Organização interna",
+            "Direção mínima para a vida",
           ]}
+          cta="Entender se faz sentido"
+          href="/produtos/basico"
+        />
+
+        <Card
+          title="Essencial"
+          description="Para quem cansou de começar e nunca continuar"
           highlight
-          cta="Ver detalhes"
+          features={[
+            "Consistência prática",
+            "Disciplina aplicada",
+            "Estrutura para a vida real",
+          ]}
+          cta="Ver se é para mim"
           href="/produtos/essencial"
         />
 
         <Card
           title="Avançado"
-          description="Para quem busca controle e consistência"
+          description="Para quem quer viver com domínio e consciência"
           features={[
             "Controle emocional",
-            "Execução consciente",
-            "Evolução contínua",
-          ]}
-          cta="Ver detalhes"
-          href="/produtos/avancado"
-        />
-
-        <Card
-          title="Elite"
-          description="Para quem decidiu viver no máximo do potencial"
-          features={[
             "Visão de longo prazo",
-            "Alta performance pessoal",
-            "Mentalidade inabalável",
+            "Execução consciente",
           ]}
-          cta="Ver detalhes"
-          href="/produtos/elite"
+          cta="Conhecer o caminho"
+          href="/produtos/avancado"
         />
       </div>
     </main>

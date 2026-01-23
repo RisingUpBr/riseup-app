@@ -1,26 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthUser } from "@/lib/useAuthUser";
-
-type InfoproductLevel = "free" | "basico" | "essencial" | "pro";
+import { PLANS, FeatureKey, PlanKey } from "@/lib/plans";
 
 export function useUserPlan() {
   const { user, loading: authLoading } = useAuthUser();
 
   const [loading, setLoading] = useState(true);
-  const [plan, setPlan] = useState<string | null>(null);
-  const [isPremium, setIsPremium] = useState(false);
-  const [infoproductLevel, setInfoproductLevel] =
-    useState<InfoproductLevel>("free");
+  const [plan, setPlan] = useState<PlanKey>("free");
+  const [entitlements, setEntitlements] = useState<Record<string, number | null>>({});
+  const [usage, setUsage] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (!user) {
-      setPlan(null);
-      setIsPremium(false);
-      setInfoproductLevel("free");
+      setPlan("free");
+      setEntitlements(PLANS.free.entitlements);
+      setUsage({});
       setLoading(false);
       return;
     }
@@ -30,36 +28,52 @@ export function useUserPlan() {
     const unsub = onSnapshot(ref, (snap) => {
       const data = snap.data();
 
-      const stripe = data?.stripe;
+      const userPlan: PlanKey = data?.plan ?? "free";
 
-      if (stripe?.status === "active") {
-        setIsPremium(true);
-        setPlan(stripe.plan ?? null);
-      } else {
-        setIsPremium(false);
-        setPlan(null);
-      }
-
-      setInfoproductLevel(
-        data?.entitlements?.infoprodutos ?? "free"
+      setPlan(userPlan);
+      setEntitlements(
+        data?.entitlements ?? PLANS[userPlan].entitlements
       );
-
+      setUsage(data?.usage ?? {});
       setLoading(false);
     });
 
     return () => unsub();
   }, [user]);
 
+  const isUnlimited = useCallback(
+    (feature: FeatureKey) => entitlements[feature] === null,
+    [entitlements]
+  );
+
+  const remaining = useCallback(
+    (feature: FeatureKey) => {
+      if (entitlements[feature] === null) return null;
+      return Math.max(
+        0,
+        (entitlements[feature] ?? 0) - (usage[feature] ?? 0)
+      );
+    },
+    [entitlements, usage]
+  );
+
+  const canUse = useCallback(
+    (feature: FeatureKey) => {
+      if (entitlements[feature] === null) return true;
+      return (usage[feature] ?? 0) < (entitlements[feature] ?? 0);
+    },
+    [entitlements, usage]
+  );
+
   return {
     loading: authLoading || loading,
-
-    // acesso ao app
-    isPremium,
-
-    // mensal | anual | quinzenal | null
     plan,
-
-    // infoprodutos
-    infoproductLevel,
+    entitlements,
+    usage,
+    canUse,
+    remaining,
+    isUnlimited,
+    isPremium: plan !== "free",
   };
 }
+

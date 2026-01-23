@@ -1,33 +1,23 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-const PRODUTOS: Record<
-  string,
-  {
-    title: string;
-    subtitle: string;
-    description: string[];
-    paraQuem: string[];
-    naoParaQuem: string[];
-    checkoutUrl: string;
-  }
-> = {
+const PRODUTOS = {
   basico: {
     title: "Básico",
-    subtitle: "Para quem quer parar de viver no automático",
+    subtitle: "Para quem decidiu sair do automático",
     description: [
       "A maioria das pessoas vive reagindo.",
       "Reage ao dia, aos problemas, às emoções.",
-      "O Básico é sobre sair do modo automático.",
-      "Criar consciência, organização mental e direção mínima para a vida.",
+      "O Básico é sobre criar consciência.",
+      "Organizar a mente e dar direção mínima à vida.",
     ],
     paraQuem: [
-      "Quer mais clareza sobre si mesmo",
-      "Sente que vive sem direção",
-      "Quer começar de forma leve e consciente",
+      "Percebe que algo precisa mudar",
+      "Quer mais clareza sobre si",
+      "Busca um começo honesto",
     ],
     naoParaQuem: [
-      "Busca transformação profunda imediata",
+      "Busca transformação instantânea",
       "Não quer refletir",
       "Espera respostas prontas",
     ],
@@ -38,66 +28,44 @@ const PRODUTOS: Record<
     title: "Essencial",
     subtitle: "Para quem cansou de começar e nunca continuar",
     description: [
-      "A maioria das pessoas sabe o que deveria fazer.",
-      "Poucas conseguem manter constância.",
-      "O Essencial não é sobre motivação momentânea.",
-      "É sobre estrutura mental, clareza e disciplina aplicada à vida real.",
+      "Saber o que fazer não é o problema.",
+      "O problema é sustentar o processo.",
+      "O Essencial é sobre estrutura.",
+      "Disciplina aplicada à vida real.",
     ],
     paraQuem: [
-      "Quer mais controle sobre a própria vida",
-      "Sente que está sempre recomeçando",
-      "Busca clareza e consistência",
+      "Quer constância",
+      "Cansou de recomeçar",
+      "Busca clareza e disciplina",
     ],
     naoParaQuem: [
-      "Procura soluções mágicas",
-      "Não está disposto a refletir",
-      "Quer resultados sem esforço",
+      "Procura atalhos",
+      "Quer motivação momentânea",
+      "Evita responsabilidade",
     ],
     checkoutUrl: "https://SEU-CHECKOUT-ESSENCIAL",
   },
 
-  pro: {
-    title: "Pro",
-    subtitle: "Para quem quer viver com domínio emocional e clareza",
+  avancado: {
+    title: "Avançado",
+    subtitle: "Para quem quer viver com domínio interno",
     description: [
       "Quando a mente não está organizada, tudo pesa.",
-      "Emoções mal resolvidas drenam energia e foco.",
-      "O Pro é sobre entender seus padrões internos.",
-      "E aprender a agir com consciência, não impulsividade.",
+      "Emoções mal resolvidas drenam energia.",
+      "O Avançado é sobre consciência elevada.",
+      "Agir com clareza, não por impulso.",
     ],
     paraQuem: [
-      "Quer mais controle emocional",
-      "Busca maturidade mental",
-      "Deseja alta performance pessoal",
-    ],
-    naoParaQuem: [
-      "Evita olhar para si",
-      "Não aceita responsabilidade",
-      "Quer atalhos fáceis",
-    ],
-    checkoutUrl: "https://SEU-CHECKOUT-PRO",
-  },
-
-  elite: {
-    title: "Elite",
-    subtitle: "Para quem quer visão, estrutura e domínio interno",
-    description: [
-      "Poucas pessoas vivem com clareza real.",
-      "Menos ainda constroem uma visão sólida de longo prazo.",
-      "Elite não é sobre status.",
-      "É sobre domínio interno, estratégia de vida e consciência elevada.",
-    ],
-    paraQuem: [
-      "Quer viver com intencionalidade",
+      "Quer domínio emocional",
       "Busca visão de longo prazo",
-      "Quer alinhar mente, identidade e propósito",
+      "Quer viver com intenção",
     ],
     naoParaQuem: [
-      "Quer apenas motivação",
-      "Não quer se aprofundar",
-      "Busca conteúdo superficial",
+      "Foge de autoconhecimento",
+      "Não quer profundidade",
+      "Busca soluções fáceis",
     ],
-    checkoutUrl: "https://SEU-CHECKOUT-ELITE",
+    checkoutUrl: "https://SEU-CHECKOUT-AVANCADO",
   },
 };
 
@@ -106,29 +74,23 @@ export default function ProdutoPage({
 }: {
   params: { slug: string };
 }) {
-  const produto = PRODUTOS[params.slug];
+  const produto = PRODUTOS[params.slug as keyof typeof PRODUTOS];
 
   if (!produto) return notFound();
 
   return (
     <main className="min-h-screen px-6 py-20 max-w-3xl mx-auto">
-      {/* TÍTULO */}
-      <h1 className="text-4xl font-bold mb-4">
-        {produto.title}
-      </h1>
-
+      <h1 className="text-4xl font-bold mb-4">{produto.title}</h1>
       <p className="text-xl text-gray-600 mb-10">
         {produto.subtitle}
       </p>
 
-      {/* HISTÓRIA */}
       <section className="space-y-4 mb-12 text-gray-700">
         {produto.description.map((text, i) => (
           <p key={i}>{text}</p>
         ))}
       </section>
 
-      {/* PARA QUEM É */}
       <section className="mb-10">
         <h2 className="font-semibold mb-2">
           Este conteúdo é para você se:
@@ -140,7 +102,6 @@ export default function ProdutoPage({
         </ul>
       </section>
 
-      {/* NÃO É PARA QUEM */}
       <section className="mb-12">
         <h2 className="font-semibold mb-2">
           Não é para você se:
@@ -152,7 +113,17 @@ export default function ProdutoPage({
         </ul>
       </section>
 
-      {/* CTA */}
+      <section className="mb-10 bg-gray-50 border rounded-xl p-6">
+        <h3 className="font-semibold mb-2">
+          O que este conteúdo NÃO promete
+        </h3>
+        <p className="text-gray-600 text-sm">
+          Não prometemos mudança instantânea, motivação infinita
+          ou resultados sem esforço.  
+          Aqui existe estrutura, clareza e responsabilidade.
+        </p>
+      </section>
+
       <div className="text-center space-y-4">
         <Link
           href={produto.checkoutUrl}
@@ -163,7 +134,7 @@ export default function ProdutoPage({
         </Link>
 
         <p className="text-sm text-gray-500">
-          Acesso liberado automaticamente após a confirmação da plataforma.
+          Acesso liberado automaticamente após confirmação.
         </p>
 
         <Link
@@ -176,3 +147,4 @@ export default function ProdutoPage({
     </main>
   );
 }
+

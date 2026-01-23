@@ -24,7 +24,7 @@ export default function AuthPage() {
 
     if (user) {
       if (userData?.onboardingCompleted) {
-        router.push("/app");
+        router.push("/dashboard");
       } else {
         router.push("/onboarding");
       }
@@ -42,7 +42,7 @@ export default function AuthPage() {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       await createUserIfNotExists(cred.user.uid, cred.user.email);
 
-      router.push("/app");
+      router.push("/dashboard");
     } catch (err: any) {
       alert(err.code);
     }

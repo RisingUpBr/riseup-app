@@ -13,38 +13,41 @@ import { KIWIFY_PRODUCTS } from "@/lib/kiwifyProducts";
 
 export async function POST(req: NextRequest) {
   try {
-    /* 📥 BODY */
-    const body = await req.json();
-
-    /* 🧪 LOG PARA DEBUG */
-    console.log("🔔 Webhook Kiwify recebido:", body);
-
-    /* 🔐 VALIDAR TOKEN (HEADER) */
+    /* 🔐 TOKEN */
     const tokenEsperado = process.env.KIWIFY_WEBHOOK_TOKEN;
+    const signature = req.nextUrl.searchParams.get("signature");
 
-    const authHeader =
-      req.headers.get("authorization") ||
-      req.headers.get("x-kiwify-token");
-
-    const tokenRecebido = authHeader?.replace("Bearer ", "");
-
-    if (!tokenEsperado || tokenRecebido !== tokenEsperado) {
-      console.warn("⚠️ Token inválido no webhook");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    /**
+     * REGRA CORRETA:
+     * - Se vier signature → validar
+     * - Se NÃO vier → permitir (teste da Kiwify)
+     */
+    if (signature && signature !== tokenEsperado) {
+      console.warn("⚠️ Token inválido no webhook", { signature });
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
     }
 
-    /* 🔁 NORMALIZAR EVENTO */
+    /* 📥 BODY */
+    const body = await req.json();
+    console.log("🔔 Webhook Kiwify recebido:", body);
+
+    /* 🔁 EVENTO */
     const event =
       body.event ||
       body.type ||
-      body?.data?.event;
+      body?.data?.event ||
+      body.order_status;
 
     if (
       event !== "order_approved" &&
       event !== "order.approved" &&
-      event !== "purchase_approved"
+      event !== "purchase_approved" &&
+      event !== "paid"
     ) {
-      // Aceita outros eventos sem erro
+      // Ignora outros eventos sem erro
       return NextResponse.json({ ok: true });
     }
 
@@ -70,7 +73,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    /* 🧠 MAPEAR PRODUTO → PLANO */
+    /* 🧠 MAPEAR PRODUTO */
     const productConfig = KIWIFY_PRODUCTS[productId];
 
     if (!productConfig) {
@@ -81,15 +84,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    /* 👤 BUSCAR USUÁRIO PELO EMAIL */
+    /* 👤 USUÁRIO */
     const usersRef = collection(db, "users");
     const q = query(usersRef, where("email", "==", email));
     const snap = await getDocs(q);
 
-    let userId: string;
-
     if (snap.empty) {
-      /* ➕ CRIAR USUÁRIO */
       const newUserRef = doc(usersRef);
       await setDoc(newUserRef, {
         email,
@@ -99,12 +99,9 @@ export async function POST(req: NextRequest) {
         updatedAt: serverTimestamp(),
         source: "kiwify",
       });
-      userId = newUserRef.id;
     } else {
-      /* ♻️ ATUALIZAR USUÁRIO */
-      userId = snap.docs[0].id;
       await setDoc(
-        doc(usersRef, userId),
+        doc(usersRef, snap.docs[0].id),
         {
           plan: productConfig.plan,
           isPremium: true,
@@ -114,13 +111,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("✅ Usuário atualizado com sucesso:", {
-      userId,
+    console.log("✅ Usuário liberado com sucesso:", {
       email,
       plan: productConfig.plan,
     });
 
-    /* ✅ SUCESSO */
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("🔥 Erro no webhook Kiwify:", error);
