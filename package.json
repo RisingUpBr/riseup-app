@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
+    "@protobufjs/aspromise": "^1.1.2",
+    "@protobufjs/base64": "^1.1.2",
     "firebase": "^12.7.0",
     "firebase-admin": "^13.6.0",
     "next": "16.1.1",

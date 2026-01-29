@@ -1,7 +1,7 @@
 "use client";
 
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 import { incrementUsage } from "@/lib/incrementUsage";
 import { useState } from "react";
 import Link from "next/link";

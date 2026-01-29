@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 import { getAppCapabilities } from "@/lib/access";
 
 export default function UpgradePage() {

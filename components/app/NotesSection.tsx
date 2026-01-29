@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 import { getAppCapabilities, canCreateItem } from "@/lib/access";
 
 export default function NotesSection() {

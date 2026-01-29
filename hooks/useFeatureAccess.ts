@@ -1,8 +1,7 @@
 // hooks/useFeatureAccess.ts
-
 "use client";
 
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 import { canUseFeature, FeatureKey } from "@/lib/canUseFeature";
 
 type AccessReason =

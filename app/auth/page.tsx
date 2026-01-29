@@ -9,7 +9,7 @@ import {
 
 import { auth } from "@/lib/firebase";
 import { createUserIfNotExists } from "@/lib/user";
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 
 export default function AuthPage() {
   const router = useRouter();

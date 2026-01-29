@@ -79,6 +79,15 @@ export default function ProdutosClient() {
   );
 }
 
+type CardProps = {
+  title: string;
+  description: string;
+  features: string[];
+  cta: string;
+  href: string;
+  highlight?: boolean;
+};
+
 function Card({
   title,
   description,
@@ -86,14 +95,7 @@ function Card({
   cta,
   href,
   highlight = false,
-}: {
-  title: string;
-  description: string;
-  features: string[];
-  cta: string;
-  href: string;
-  highlight?: boolean;
-}) {
+}: CardProps) {
   return (
     <div
       className={`border rounded-xl p-6 flex flex-col justify-between transition ${

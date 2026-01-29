@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 import { PLANS, FeatureKey, PlanKey } from "@/lib/plans";
 
 export function useUserPlan() {
@@ -11,10 +11,14 @@ export function useUserPlan() {
 
   const [loading, setLoading] = useState(true);
   const [plan, setPlan] = useState<PlanKey>("free");
-  const [entitlements, setEntitlements] = useState<Record<string, number | null>>({});
+  const [entitlements, setEntitlements] = useState<Record<string, number | null>>(
+    PLANS.free.entitlements
+  );
   const [usage, setUsage] = useState<Record<string, number>>({});
 
   useEffect(() => {
+    if (authLoading) return;
+
     if (!user) {
       setPlan("free");
       setEntitlements(PLANS.free.entitlements);
@@ -39,7 +43,7 @@ export function useUserPlan() {
     });
 
     return () => unsub();
-  }, [user]);
+  }, [user, authLoading]);
 
   const isUnlimited = useCallback(
     (feature: FeatureKey) => entitlements[feature] === null,
@@ -66,7 +70,7 @@ export function useUserPlan() {
   );
 
   return {
-    loading: authLoading || loading,
+    loading,
     plan,
     entitlements,
     usage,
@@ -76,4 +80,3 @@ export function useUserPlan() {
     isPremium: plan !== "free",
   };
 }
-

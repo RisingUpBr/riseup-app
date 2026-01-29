@@ -1,7 +1,7 @@
 "use client";
 
 import { PlanCard } from "@/components/PlanCard";
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 
 type PlanType = "quinzenal" | "mensal" | "anual";
 

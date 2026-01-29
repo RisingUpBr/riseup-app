@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { doc, updateDoc } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 
 export default function OnboardingPage() {
   const router = useRouter();

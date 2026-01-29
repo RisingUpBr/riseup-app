@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 
 export default function UserProductsCard() {
   const { userData, loading } = useAuthUser();

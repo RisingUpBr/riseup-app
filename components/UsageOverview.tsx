@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthUser } from "@/lib/useAuthUser";
+import { useAuthUser } from "@/hooks/useAuthUser";
 import { FEATURE_DEFINITIONS } from "@/lib/features";
 import FeatureUsageCard from "./FeatureUsageCard";
 

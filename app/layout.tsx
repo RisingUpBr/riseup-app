@@ -1,11 +1,9 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 
-// Certifique-se que Header e Footer existem nessas pastas!
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer"; 
+import Footer from "@/components/layout/Footer";
 
 import "./globals.css";
 
