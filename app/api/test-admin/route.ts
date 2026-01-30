@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
-import { adminDb } from "@/lib/firebaseAdmin";
+import { getAdminDb } from "@/lib/firebaseAdmin";
 
 export async function GET() {
   try {
-    // teste simples: listar 1 usuário
+    // ✅ Pega a instância do Firestore primeiro
+    const adminDb = await getAdminDb();
+    
+    // ✅ Agora pode usar normalmente
     const snap = await adminDb.collection("users").limit(1).get();
 
     return NextResponse.json({

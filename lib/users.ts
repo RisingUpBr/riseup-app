@@ -1,4 +1,4 @@
-import { adminDb } from "./firebaseAdmin";
+import { getAdminDb } from "./firebaseAdmin";
 import admin from "firebase-admin";
 import { stripe } from "./stripe";
 
@@ -6,7 +6,10 @@ export async function createUserIfNotExists(
   uid: string,
   email: string
 ) {
-  const userRef = adminDb.collection("users").doc(uid);
+  // ✅ Pega a instância do Firestore
+  const db = await getAdminDb();
+  
+  const userRef = db.collection("users").doc(uid);
   const snap = await userRef.get();
 
   if (snap.exists) {
@@ -33,4 +36,3 @@ export async function createUserIfNotExists(
 
   return userData;
 }
-

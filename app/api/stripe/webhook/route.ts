@@ -1,14 +1,14 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { adminDb } from "@/lib/firebaseAdmin";
+import { getAdminDb } from "@/lib/firebaseAdmin";
 import { PRICE_ID_TO_PLAN } from "@/lib/stripe/plans";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const headersList = await headers(); // ✅ AQUI ESTÁ A CORREÇÃO
+  const headersList = await headers();
   const signature = headersList.get("stripe-signature");
 
   let event: Stripe.Event;
@@ -25,6 +25,9 @@ export async function POST(req: Request) {
   }
 
   try {
+    // ✅ Pega a instância do Firestore com await
+    const adminDb = await getAdminDb();
+
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
@@ -46,6 +49,7 @@ export async function POST(req: Request) {
         const uid = session.metadata?.uid;
         if (!uid) break;
 
+        // ✅ Agora adminDb está definido corretamente
         await adminDb.doc(`users/${uid}`).set(
           {
             stripe: {
@@ -72,6 +76,7 @@ export async function POST(req: Request) {
         const priceId = subscription.items.data[0].price.id;
         const plan = PRICE_ID_TO_PLAN[priceId] ?? "free";
 
+        // ✅ adminDb já foi definido no início do switch
         const snapshot = await adminDb
           .collection("users")
           .where("stripe.subscriptionId", "==", subscription.id)
