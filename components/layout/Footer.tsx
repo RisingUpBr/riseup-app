@@ -1,47 +1,207 @@
-// components/layout/Footer.tsx
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-neutral-800 bg-black">
-      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm text-neutral-400">
-        <div>
-          <h3 className="text-white font-semibold mb-2">
-            Rise<span className="text-yellow-400">Up</span>
-          </h3>
-          <p>
-            Eleve sua mente. Execute seu propósito.
-          </p>
-        </div>
+    <footer className="bg-neutral-950 border-t border-neutral-800 text-neutral-400">
+      <div className="max-w-[1920px] mx-auto px-6 sm:px-8 lg:px-16 py-20">
+        {/* FLEX COM ITEMS-START - Logo e títulos na mesma altura */}
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-16 lg:gap-20">
+          
+          {/* LOGO, DESCRIÇÃO E REDES - EXTREMA ESQUERDA */}
+          <div className="max-w-md">
+            <Image
+              src="/logo/Logo transparente RiseUp Dourado e preto (1).png"
+              alt="RiseUp"
+              width={280}
+              height={93}
+              className="h-20 w-auto mb-6"
+            />
+            <p className="text-sm text-neutral-500 leading-relaxed mb-10">
+              A plataforma que combina app inteligente e conteúdos práticos para transformar sua mentalidade, organizar sua rotina e construir progresso real. Clareza, disciplina e performance integradas em um único ecossistema pensado para evolução consistente.
+            </p>
+            
+            {/* REDES SOCIAIS */}
+            <div className="flex gap-4">
+              {/* INSTAGRAM */}
+              <a
+                href="https://www.instagram.com/riseup.vibe/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-500 hover:text-[#D4AF37]"
+                aria-label="Instagram"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
 
-        <div>
-          <h4 className="text-white font-medium mb-2">Empresa</h4>
-          <ul className="space-y-1">
-            <li><Link href="/sobre">Sobre</Link></li>
-            <li><Link href="/conecte-se">Conecte-se</Link></li>
-          </ul>
-        </div>
+              {/* TIKTOK */}
+              <a
+                href="https://www.tiktok.com/@riseup.vibe"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-500 hover:text-[#D4AF37]"
+                aria-label="TikTok"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                </svg>
+              </a>
 
-        <div>
-          <h4 className="text-white font-medium mb-2">Produto</h4>
-          <ul className="space-y-1">
-            <li><Link href="/app">App</Link></li>
-            <li><Link href="/planos">Planos</Link></li>
-            <li><Link href="/recursos">Recursos</Link></li>
-          </ul>
-        </div>
+              {/* YOUTUBE */}
+              <a
+                href="https://www.youtube.com/@canalRiseUp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-500 hover:text-[#D4AF37]"
+                aria-label="YouTube"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
 
-        <div>
-          <h4 className="text-white font-medium mb-2">Legal</h4>
-          <ul className="space-y-1">
-            <li><Link href="/legal/termos">Termos</Link></li>
-            <li><Link href="/legal/privacidade">Privacidade</Link></li>
-          </ul>
+          {/* MENU - EXTREMA DIREITA */}
+          <div className="flex-shrink-0">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 lg:gap-16">
+              {/* EMPRESA */}
+              <div>
+                <h3 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">
+                  Empresa
+                </h3>
+                <ul className="space-y-3.5">
+                  <li>
+                    <Link
+                      href="/sobre"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Sobre
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/conecte-se"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Conecte-se
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* PRODUTO */}
+              <div>
+                <h3 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">
+                  Produto
+                </h3>
+                <ul className="space-y-3.5">
+                  <li>
+                    <Link
+                      href="/app"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      App
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/planos"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Planos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/recursos"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Recursos
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* RECURSOS */}
+              <div>
+                <h3 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">
+                  Recursos
+                </h3>
+                <ul className="space-y-3.5">
+                  <li>
+                    <Link
+                      href="/recursos"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Materiais Grátis
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* LEGAL */}
+              <div>
+                <h3 className="text-white font-semibold mb-5 text-sm uppercase tracking-wider">
+                  Legal
+                </h3>
+                <ul className="space-y-3.5">
+                  <li>
+                    <Link
+                      href="/legal/termos"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Termos de Uso
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/legal/privacidade"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Privacidade
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/legal/seguranca"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Segurança
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/legal/cookies"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Cookies
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/legal/reembolso"
+                      className="text-sm hover:text-[#D4AF37] transition-colors"
+                    >
+                      Reembolso
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="text-center text-xs text-neutral-600 py-6 border-t border-neutral-800">
-        © {new Date().getFullYear()} Rise Up. Todos os direitos reservados.
+      {/* COPYRIGHT - ALINHADO À ESQUERDA */}
+      <div className="border-t border-neutral-800">
+        <div className="max-w-[1920px] mx-auto px-6 sm:px-8 lg:px-16 py-8">
+          <p className="text-xs text-neutral-600">
+            © {new Date().getFullYear()} RiseUp. Todos os direitos reservados.
+          </p>
+        </div>
       </div>
     </footer>
   );

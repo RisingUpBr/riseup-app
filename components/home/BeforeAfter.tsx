@@ -1,65 +1,156 @@
 // components/home/BeforeAfter.tsx
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+
 export default function BeforeAfter() {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+
+      const rect = sectionRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      // Inicia quando o card chega no topo da viewport
+      const scrollStart = rect.top;
+      const scrollEnd = -rect.height + windowHeight;
+      
+      // Progresso de 0 a 1
+      let progress = 0;
+      if (scrollStart <= 0) {
+        progress = Math.min(1, Math.abs(scrollStart) / Math.abs(scrollEnd));
+      }
+      
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const beforePoints = [
+    "Cabeça cheia de ideias sem saber por onde começar.",
+    "Planejamento complexo que nunca é executado.",
+    "Motivação passageira que some no dia seguinte.",
+    "Procrastinação por excesso de opções.",
+  ];
+
+  const afterPoints = [
+    "Prioridades claras definidas em minutos.",
+    "Sistema simples que você executa sem pensar.",
+    "Disciplina prática que não depende de humor.",
+    "Ação consistente com progresso visível.",
+  ];
+
+  // Sobreposição RÁPIDA: acontece nos primeiros 40% do scroll
+  const overlapPhase = Math.min(scrollProgress / 0.4, 1);
+  
+  // BEFORE: move para direita (até 50% no máximo)
+  const beforeX = overlapPhase * 50;
+  
+  // AFTER: move para esquerda (até -50% no máximo)
+  const afterX = overlapPhase * -50;
+  
+  // Z-index muda quando sobreposição começar
+  const beforeZ = scrollProgress > 0.1 ? 1 : 2;
+  const afterZ = scrollProgress > 0.1 ? 3 : 2;
+
   return (
-    <section className="bg-[#0A0A0A] py-28">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="max-w-2xl mb-20">
-          <h2 className="text-3xl md:text-4xl font-semibold text-white tracking-tight">
-            O antes é confuso. O depois é estruturado.
-          </h2>
-          <p className="mt-4 text-[#B3B3B3] text-base md:text-lg">
-            A diferença não é quem você é. É o sistema que você usa todos os dias.
-          </p>
-        </div>
+    <section
+      ref={sectionRef}
+      className="relative bg-white dark:bg-black transition-colors"
+      style={{ minHeight: "200vh" }} // Altura para permitir scroll
+    >
+      <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full">
+          {/* CARDS LADO A LADO */}
+          <div className="relative flex flex-col md:flex-row items-stretch justify-center gap-6">
+            
+            {/* BEFORE - Card Esquerdo */}
+            <div
+              className="relative w-full md:w-[550px] bg-neutral-900 rounded-3xl p-10 md:p-14 border-2 border-neutral-800 transition-all duration-500 flex flex-col"
+              style={{ 
+                transform: `translateX(${beforeX}%)`,
+                zIndex: beforeZ,
+                minHeight: "600px" 
+              }}
+            >
+              <p className="text-sm font-semibold text-neutral-500 mb-4 uppercase tracking-wider">
+                Antes da Rise Up:
+              </p>
+              
+              <h3 className="text-4xl md:text-5xl font-bold text-white mb-10 leading-tight">
+                Caos e paralisia
+              </h3>
 
-        {/* Timeline */}
-        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-16">
-          {/* Linha central */}
-          <div className="hidden md:block absolute left-1/2 top-0 h-full w-px bg-[#D4AF37]/30" />
-
-          {/* BEFORE */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-red-400">
-              Antes da Rise Up
-            </h3>
-
-            {[
-              "Falta de clareza sobre prioridades",
-              "Excesso de informação e distração",
-              "Começa motivado e abandona rápido",
-              "Depende de força de vontade",
-              "Progresso inconsistente",
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="bg-[#111111] border border-[#1E1E1E] rounded-xl p-6"
-              >
-                <p className="text-sm text-[#B3B3B3]">{item}</p>
+              <div className="space-y-5 mb-auto">
+                {beforePoints.map((point, index) => (
+                  <div key={index} className="flex items-center justify-between gap-4">
+                    <span className="text-base text-neutral-300 leading-relaxed flex-1">
+                      {point}
+                    </span>
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-neutral-700 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-neutral-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {/* AFTER */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-semibold text-[#D4AF37]">
-              Depois da Rise Up
-            </h3>
-
-            {[
-              "Prioridades claras todos os dias",
-              "Sistema simples e objetivo",
-              "Execução consistente",
-              "Disciplina prática e sustentável",
-              "Evolução visível no tempo",
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="bg-[#111111] border border-[#D4AF37]/30 rounded-xl p-6"
+              <Link
+                href="/auth"
+                className="w-full mt-10 px-8 py-4 bg-white text-black rounded-full font-semibold hover:scale-[1.02] transition-transform text-center text-lg"
               >
-                <p className="text-sm text-[#E5E5E5]">{item}</p>
+                Sair do caos
+              </Link>
+            </div>
+
+            {/* AFTER - Card Direito */}
+            <div
+              className="relative w-full md:w-[550px] bg-gradient-to-br from-[#0D4D3D] to-[#0A3D2F] rounded-3xl p-10 md:p-14 border-2 border-[#D4AF37] shadow-2xl transition-all duration-500 flex flex-col"
+              style={{ 
+                transform: `translateX(${afterX}%)`,
+                zIndex: afterZ,
+                minHeight: "600px" 
+              }}
+            >
+              <p className="text-sm font-semibold text-[#D4AF37] mb-4 uppercase tracking-wider">
+                Depois da Rise Up:
+              </p>
+              
+              <h3 className="text-4xl md:text-5xl font-bold text-white mb-10 leading-tight">
+                Clareza e execução
+              </h3>
+
+              <div className="space-y-5 mb-auto">
+                {afterPoints.map((point, index) => (
+                  <div key={index} className="flex items-center justify-between gap-4">
+                    <span className="text-base text-white leading-relaxed flex-1">
+                      {point}
+                    </span>
+                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#D4AF37] flex items-center justify-center">
+                      <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                      </svg>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+
+              <Link
+                href="/auth"
+                className="w-full mt-10 px-8 py-4 bg-[#D4AF37] hover:bg-[#E5C158] text-black rounded-full font-semibold hover:scale-[1.02] transition-transform text-center text-lg"
+              >
+                Começar agora
+              </Link>
+            </div>
           </div>
         </div>
       </div>

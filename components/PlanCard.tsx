@@ -8,6 +8,7 @@ type PlanCardProps = {
   highlight?: boolean;
   buttonText: string;
   onClick: () => void;
+  disabled?: boolean; // ✅ ADICIONADO
 };
 
 export function PlanCard({
@@ -18,6 +19,7 @@ export function PlanCard({
   highlight,
   buttonText,
   onClick,
+  disabled = false, // ✅ ADICIONADO
 }: PlanCardProps) {
   return (
     <div
@@ -41,10 +43,13 @@ export function PlanCard({
 
       <button
         onClick={onClick}
-        className={`mt-6 py-2 rounded font-semibold ${
-          highlight
-            ? "bg-black text-yellow-400"
-            : "bg-gray-800 text-white"
+        disabled={disabled} // ✅ ADICIONADO
+        className={`mt-6 py-2 rounded font-semibold transition ${
+          disabled
+            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+            : highlight
+            ? "bg-black text-yellow-400 hover:opacity-90"
+            : "bg-gray-800 text-white hover:opacity-90"
         }`}
       >
         {buttonText}
