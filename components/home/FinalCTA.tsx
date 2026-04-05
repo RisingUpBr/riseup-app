@@ -35,13 +35,14 @@ export default function FinalCTA() {
         {/* CARD CENTRAL - MENOR E MAIS DIRETO */}
         <div className="bg-neutral-900 rounded-3xl p-8 md:p-10 text-center shadow-2xl">
           
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
-            Comece com clareza.{" "}
-            <span className="text-[#D4AF37]">Evolua com estrutura.</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight">
+            Pare de planejar.
+            <br />
+            Comece a executar.
           </h2>
-          
+
           <p className="text-sm md:text-base text-neutral-400 mb-8 max-w-xl mx-auto leading-relaxed">
-            Sistema que funciona sem exagero, sem atalhos, sem promessas vazias.
+            O sistema está pronto. Só falta você.
           </p>
 
           {/* CTA Principal */}

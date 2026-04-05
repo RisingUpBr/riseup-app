@@ -47,10 +47,10 @@ export default function AppSteps() {
             
             {/* Texto */}
             <div>
-              <h3 className="text-xl md:text-2xl font-bold text-black dark:text-white mb-2">
+              <h3 className="text-[20px] font-bold text-black dark:text-white mb-2">
                 Passo 1: Crie sua conta grátis
               </h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              <p className="text-[20px] text-neutral-600 dark:text-neutral-400 leading-relaxed mt-1">
                 Cadastro rápido sem cartão de crédito. Leva menos de 1 minuto.
               </p>
             </div>
@@ -100,10 +100,10 @@ export default function AppSteps() {
             
             {/* Texto */}
             <div>
-              <h3 className="text-xl md:text-2xl font-bold text-black dark:text-white mb-2">
+              <h3 className="text-[20px] font-bold text-black dark:text-white mb-2">
                 Passo 2: Acesse o dashboard
               </h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              <p className="text-[20px] text-neutral-600 dark:text-neutral-400 leading-relaxed mt-1">
                 Todas as funcionalidades no menu lateral: anotações, flashcards, blocos de tempo e mais.
               </p>
             </div>
@@ -152,10 +152,10 @@ export default function AppSteps() {
             
             {/* Texto */}
             <div>
-              <h3 className="text-xl md:text-2xl font-bold text-black dark:text-white mb-2">
+              <h3 className="text-[20px] font-bold text-black dark:text-white mb-2">
                 Passo 3: Escolha e execute
               </h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              <p className="text-[20px] text-neutral-600 dark:text-neutral-400 leading-relaxed mt-1">
                 Anotações ramificadas, flashcards com IA, blocos de tempo. Use o que precisa, quando precisa.
               </p>
             </div>
@@ -164,7 +164,7 @@ export default function AppSteps() {
         </div>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-20">
           <a
             href="/auth"
             className="inline-flex items-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-full font-bold hover:scale-105 transition-transform text-center"
@@ -173,7 +173,7 @@ export default function AppSteps() {
           </a>
           <a
             href="/pricing"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-black dark:border-white text-black dark:text-white rounded-full font-bold hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all text-center"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-black dark:border-white text-black dark:text-white rounded-full font-bold hover:scale-105 transition-transform duration-200 text-center"
           >
             Ver planos
           </a>

@@ -3,6 +3,7 @@ export default function AppPresentation() {
   return (
     <section className="py-16 md:py-24 bg-black transition-colors overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 items-stretch">
           
           {/* ESQUERDA - 3/5 do espaço */}
@@ -70,148 +71,63 @@ export default function AppPresentation() {
             </div>
           </div>
 
-          {/* DIREITA - 2/5 do espaço - MOCKUP MAIOR */}
-          <div className="lg:col-span-2 bg-gradient-to-br from-neutral-900 to-neutral-950 p-8 md:p-12 lg:p-16 rounded-3xl lg:rounded-r-3xl lg:rounded-l-none border-2 border-neutral-800 lg:border-l-0 flex items-center justify-center">
-            <div className="relative w-full h-full min-h-[500px] lg:min-h-[600px]">
-              {/* SVG para as linhas de conexão */}
-              <svg className="absolute inset-0 w-full h-full" viewBox="0 0 500 600" style={{ zIndex: 1 }}>
-                {/* Linha central → superior esquerda */}
-                <path
-                  d="M 250,300 Q 160,200 110,120"
-                  stroke="#D4AF37"
-                  strokeWidth="2.5"
-                  fill="none"
-                  opacity="0.6"
-                />
-                {/* Linha central → superior direita */}
-                <path
-                  d="M 250,300 Q 340,200 390,120"
-                  stroke="#D4AF37"
-                  strokeWidth="2.5"
-                  fill="none"
-                  opacity="0.6"
-                />
-                {/* Linha central → inferior esquerda */}
-                <path
-                  d="M 250,300 Q 160,400 110,480"
-                  stroke="#D4AF37"
-                  strokeWidth="2.5"
-                  fill="none"
-                  opacity="0.6"
-                />
-                {/* Linha central → inferior direita */}
-                <path
-                  d="M 250,300 Q 340,400 390,480"
-                  stroke="#D4AF37"
-                  strokeWidth="2.5"
-                  fill="none"
-                  opacity="0.6"
-                />
-              </svg>
+          {/* DIREITA - 2/5 do espaço */}
+          <div className="lg:col-span-2 bg-gradient-to-br from-neutral-900 to-neutral-950 p-8 md:p-12 rounded-3xl lg:rounded-r-3xl lg:rounded-l-none border-2 border-neutral-800 lg:border-l-0 flex items-center justify-center">
+            {/* Hub-and-spoke SVG — Rise Up system */}
+            <svg
+              viewBox="0 0 500 380"
+              className="w-full h-full"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <defs>
+                <filter id="hub-glow" x="-40%" y="-40%" width="180%" height="180%">
+                  <feDropShadow dx="0" dy="0" stdDeviation="10" floodColor="#D4AF37" floodOpacity="0.35"/>
+                </filter>
+              </defs>
 
-              {/* Bloco Central - Anotação Principal */}
-              <div 
-                className="absolute bg-gradient-to-br from-[#D4AF37] to-[#B8941F] rounded-xl p-4 md:p-5 shadow-2xl border-2 border-[#D4AF37]"
-                style={{ 
-                  top: '50%', 
-                  left: '50%', 
-                  transform: 'translate(-50%, -50%)',
-                  width: '180px',
-                  zIndex: 2
-                }}
-              >
-                <div className="text-xs md:text-sm font-bold text-black mb-2 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-black flex-shrink-0"></span>
-                  <span>📝 Projeto Q1</span>
-                </div>
-                <div className="text-[10px] md:text-xs text-black/80 leading-relaxed">
-                  Lançamento do produto principal até março
-                </div>
-              </div>
+              {/* Dashed connection lines */}
+              <line x1="148" y1="63" x2="185" y2="145" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="5,4" opacity="0.6"/>
+              <line x1="352" y1="63" x2="315" y2="145" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="5,4" opacity="0.6"/>
+              <line x1="148" y1="317" x2="185" y2="235" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="5,4" opacity="0.6"/>
+              <line x1="352" y1="317" x2="315" y2="235" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="5,4" opacity="0.6"/>
 
-              {/* Bloco Superior Esquerdo */}
-              <div 
-                className="absolute bg-neutral-800 rounded-lg p-3 md:p-4 shadow-xl border border-neutral-700"
-                style={{ 
-                  top: '12%', 
-                  left: '8%',
-                  width: '140px',
-                  zIndex: 2
-                }}
-              >
-                <div className="text-xs font-bold text-white mb-1.5 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] flex-shrink-0"></span>
-                  <span>✓ Tarefa</span>
-                </div>
-                <div className="text-[10px] text-neutral-400 leading-relaxed">
-                  Validar protótipo
-                </div>
-              </div>
+              {/* Center hub — Rise Up */}
+              <rect x="185" y="145" width="130" height="90" rx="14" fill="#D4AF37" fillOpacity="0.15" stroke="#D4AF37" strokeWidth="1.8" filter="url(#hub-glow)"/>
+              <text x="250" y="186" textAnchor="middle" fontFamily="sans-serif" fontSize="16" fontWeight="bold" fill="#D4AF37">Rise Up</text>
+              <text x="250" y="207" textAnchor="middle" fontFamily="sans-serif" fontSize="11" fill="#D4AF37" fillOpacity="0.55">sistema</text>
 
-              {/* Bloco Superior Direito */}
-              <div 
-                className="absolute bg-neutral-800 rounded-lg p-3 md:p-4 shadow-xl border border-neutral-700"
-                style={{ 
-                  top: '12%', 
-                  right: '8%',
-                  width: '140px',
-                  zIndex: 2
-                }}
-              >
-                <div className="text-xs font-bold text-white mb-1.5 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] flex-shrink-0"></span>
-                  <span>🎯 Meta</span>
-                </div>
-                <div className="text-[10px] text-neutral-400 leading-relaxed">
-                  +10k usuários ativos
-                </div>
-              </div>
+              {/* TL — Metas */}
+              <rect x="18" y="18" width="130" height="76" rx="10" fill="#1a1a1a" stroke="#444" strokeWidth="1.2"/>
+              <polyline points="36,58 44,66 60,50" stroke="#D4AF37" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              <text x="72" y="62" fontFamily="sans-serif" fontSize="14" fill="#aaa">Metas</text>
+              <circle cx="148" cy="56" r="4" fill="#D4AF37" fillOpacity="0.7"/>
 
-              {/* Bloco Inferior Esquerdo */}
-              <div 
-                className="absolute bg-neutral-800 rounded-lg p-3 md:p-4 shadow-xl border border-neutral-700"
-                style={{ 
-                  bottom: '12%', 
-                  left: '8%',
-                  width: '140px',
-                  zIndex: 2
-                }}
-              >
-                <div className="text-xs font-bold text-white mb-1.5 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] flex-shrink-0"></span>
-                  <span>💡 Ideia</span>
-                </div>
-                <div className="text-[10px] text-neutral-400 leading-relaxed">
-                  Feature premium
-                </div>
-              </div>
+              {/* TR — Rotina */}
+              <rect x="352" y="18" width="130" height="76" rx="10" fill="#1a1a1a" stroke="#444" strokeWidth="1.2"/>
+              <circle cx="370" cy="56" r="11" stroke="#D4AF37" strokeWidth="1.6" fill="none"/>
+              <line x1="370" y1="56" x2="370" y2="48" stroke="#D4AF37" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="370" y1="56" x2="376" y2="61" stroke="#D4AF37" strokeWidth="1.5" strokeLinecap="round"/>
+              <text x="389" y="62" fontFamily="sans-serif" fontSize="14" fill="#aaa">Rotina</text>
+              <circle cx="352" cy="56" r="4" fill="#D4AF37" fillOpacity="0.7"/>
 
-              {/* Bloco Inferior Direito */}
-              <div 
-                className="absolute bg-neutral-800 rounded-lg p-3 md:p-4 shadow-xl border border-neutral-700"
-                style={{ 
-                  bottom: '12%', 
-                  right: '8%',
-                  width: '140px',
-                  zIndex: 2
-                }}
-              >
-                <div className="text-xs font-bold text-white mb-1.5 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] flex-shrink-0"></span>
-                  <span>📄 Doc</span>
-                </div>
-                <div className="text-[10px] text-neutral-400 leading-relaxed">
-                  Estratégia.pdf
-                </div>
-              </div>
+              {/* BL — Notas */}
+              <rect x="18" y="286" width="130" height="76" rx="10" fill="#1a1a1a" stroke="#444" strokeWidth="1.2"/>
+              <rect x="35" y="298" width="22" height="30" rx="3" stroke="#D4AF37" strokeWidth="1.5" fill="none"/>
+              <line x1="39" y1="307" x2="54" y2="307" stroke="#D4AF37" strokeWidth="1.2" strokeLinecap="round"/>
+              <line x1="39" y1="313" x2="54" y2="313" stroke="#D4AF37" strokeWidth="1.2" strokeLinecap="round"/>
+              <line x1="39" y1="319" x2="50" y2="319" stroke="#D4AF37" strokeWidth="1.2" strokeLinecap="round"/>
+              <text x="66" y="318" fontFamily="sans-serif" fontSize="14" fill="#aaa">Notas</text>
+              <circle cx="148" cy="324" r="4" fill="#D4AF37" fillOpacity="0.7"/>
 
-              {/* Pontos de conexão nas linhas */}
-              <div className="absolute w-3 h-3 rounded-full bg-[#D4AF37]" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 3 }}></div>
-              <div className="absolute w-2 h-2 rounded-full bg-[#D4AF37]" style={{ top: '15%', left: '15%', zIndex: 3 }}></div>
-              <div className="absolute w-2 h-2 rounded-full bg-[#D4AF37]" style={{ top: '15%', right: '15%', zIndex: 3 }}></div>
-              <div className="absolute w-2 h-2 rounded-full bg-[#D4AF37]" style={{ bottom: '15%', left: '15%', zIndex: 3 }}></div>
-              <div className="absolute w-2 h-2 rounded-full bg-[#D4AF37]" style={{ bottom: '15%', right: '15%', zIndex: 3 }}></div>
-            </div>
+              {/* BR — Progresso */}
+              <rect x="352" y="286" width="130" height="76" rx="10" fill="#1a1a1a" stroke="#444" strokeWidth="1.2"/>
+              <rect x="362" y="318" width="8" height="20" rx="2" fill="#D4AF37" fillOpacity="0.5"/>
+              <rect x="374" y="308" width="8" height="30" rx="2" fill="#D4AF37" fillOpacity="0.75"/>
+              <rect x="386" y="313" width="8" height="25" rx="2" fill="#D4AF37" fillOpacity="0.9"/>
+              <text x="401" y="322" fontFamily="sans-serif" fontSize="14" fill="#aaa">Progresso</text>
+              <circle cx="352" cy="324" r="4" fill="#D4AF37" fillOpacity="0.7"/>
+            </svg>
           </div>
         </div>
       </div>

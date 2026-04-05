@@ -7,12 +7,9 @@ export default function Benefits() {
   const benefits = [
     {
       title: "Planeje em minutos",
-      description: "Organize suas prioridades sem perder tempo. O app guia você do caos mental para a clareza em poucos cliques.",
-      cta: "Começar",
-      gradient: "from-blue-50 via-purple-50 to-pink-50 dark:from-blue-950/20 dark:via-purple-950/20 dark:to-pink-950/20",
+      description: "Defina suas prioridades antes do caos começar. O app guia você pelas decisões mais importantes do dia em menos de 5 minutos. Sem sobrecarga, sem paralisia.",
       mockup: (
         <div className="relative w-full h-full flex items-center justify-center p-8">
-          {/* Card mockup - Planejamento */}
           <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl p-6 border border-neutral-200 dark:border-neutral-700">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-[#D4AF37] flex items-center justify-center text-white font-bold">
@@ -43,12 +40,9 @@ export default function Benefits() {
     },
     {
       title: "Execute com foco",
-      description: "Transforme intenção em ação prática. Blocos de tempo estruturados para você fazer o que importa.",
-      cta: "Conhecer",
-      gradient: "from-orange-50 via-amber-50 to-yellow-50 dark:from-orange-950/20 dark:via-amber-950/20 dark:to-yellow-950/20",
+      description: "Transforme intenção em ação com blocos de tempo estruturados. Cada bloco tem um objetivo claro. Você sabe exatamente o que fazer e por quanto tempo.",
       mockup: (
         <div className="relative w-full h-full flex items-center justify-center p-8">
-          {/* Card mockup - Execução */}
           <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl p-6 border border-neutral-200 dark:border-neutral-700">
             <div className="mb-6">
               <h4 className="font-bold text-black dark:text-white mb-2">Bloco de foco</h4>
@@ -76,12 +70,9 @@ export default function Benefits() {
     },
     {
       title: "Aprenda o essencial",
-      description: "Técnicas comprovadas sem enrolação. Conteúdos diretos que você aplica no mesmo dia.",
-      cta: "Explorar",
-      gradient: "from-green-50 via-emerald-50 to-teal-50 dark:from-green-950/20 dark:via-emerald-950/20 dark:to-teal-950/20",
+      description: "Conteúdo direto ao ponto, sem enrolação. Técnicas comprovadas que você aplica no mesmo dia. Nada de teoria sem prática.",
       mockup: (
         <div className="relative w-full h-full flex items-center justify-center p-8">
-          {/* Card mockup - Infoproduto */}
           <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl p-6 border border-neutral-200 dark:border-neutral-700">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#D4AF37] to-[#B8941F] flex items-center justify-center text-white text-xl font-bold">
@@ -116,12 +107,9 @@ export default function Benefits() {
     },
     {
       title: "Acompanhe sua evolução",
-      description: "Veja seu progresso de forma clara e objetiva. Métricas simples que mostram sua transformação real.",
-      cta: "Ver mais",
-      gradient: "from-violet-50 via-purple-50 to-fuchsia-50 dark:from-violet-950/20 dark:via-purple-950/20 dark:to-fuchsia-950/20",
+      description: "Veja seu progresso de forma simples e objetiva. Métricas que mostram o que funciona e o que ajustar. Sem dashboards complicados.",
       mockup: (
         <div className="relative w-full h-full flex items-center justify-center p-8">
-          {/* Card mockup - Progresso */}
           <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl p-6 border border-neutral-200 dark:border-neutral-700">
             <div className="mb-6">
               <h4 className="font-bold text-black dark:text-white mb-1">Últimos 7 dias</h4>
@@ -164,59 +152,60 @@ export default function Benefits() {
   ];
 
   return (
-    <section className="py-20 md:py-32 bg-white dark:bg-black transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <section className="py-20 md:py-32 bg-black transition-colors">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="max-w-3xl mb-20">
-          <h2 className="text-3xl md:text-5xl font-bold text-black dark:text-white mb-6 leading-tight">
-            O que muda na prática
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-4 leading-tight">
+            O que muda quando você tem um sistema.
           </h2>
-          <p className="text-lg md:text-xl text-neutral-600 dark:text-neutral-400 leading-relaxed">
-            Clareza mental, execução estruturada e progresso consistente. Sem depender de motivação.
+          <p className="text-neutral-400 text-base max-w-[500px] mx-auto">
+            Não é força de vontade. É estrutura.
           </p>
         </div>
 
-        {/* Benefits Grid */}
-        <div className="space-y-24 md:space-y-32">
+        {/* Benefits Blocks — Base44 style */}
+        <div className="space-y-4">
           {benefits.map((benefit, index) => (
+
             <div
               key={index}
-              className={`grid md:grid-cols-2 gap-8 md:gap-12 items-center ${
+              className={`flex flex-col md:flex-row rounded-2xl overflow-hidden ${
                 index % 2 === 1 ? "md:flex-row-reverse" : ""
               }`}
             >
-              {/* Conteúdo - Esquerda */}
-              <div className={`${index % 2 === 1 ? "md:order-2" : ""}`}>
-                <h3 className="text-2xl md:text-4xl font-bold text-black dark:text-white mb-4 leading-tight">
+              {/* Text card */}
+              <div className="w-full md:w-1/2 bg-neutral-950 p-10 flex flex-col justify-center">
+                <h3 className="text-2xl font-bold text-white leading-tight">
                   {benefit.title}
                 </h3>
-                <p className="text-base md:text-lg text-neutral-600 dark:text-neutral-400 mb-8 leading-relaxed">
+                <p className="text-neutral-400 text-base mt-3 leading-relaxed">
                   {benefit.description}
                 </p>
                 <Link
                   href="/app"
-                  className="inline-flex items-center gap-2 text-sm md:text-base font-semibold text-black dark:text-white hover:text-[#D4AF37] dark:hover:text-[#D4AF37] transition-colors group"
+                  className="mt-6 text-sm font-medium text-[#D4AF37] hover:text-[#E5C158] transition-colors w-fit"
                 >
-                  <span>{benefit.cta}</span>
-                  <svg 
-                    className="w-5 h-5 group-hover:translate-x-1 transition-transform" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
+                  Começar →
                 </Link>
               </div>
 
-              {/* Mockup - Direita */}
-              <div className={`${index % 2 === 1 ? "md:order-1" : ""}`}>
-                <div className={`relative rounded-3xl overflow-hidden bg-gradient-to-br ${benefit.gradient} min-h-[400px] md:min-h-[500px] shadow-2xl border border-neutral-200/50 dark:border-neutral-800/50`}>
-                  {benefit.mockup}
-                </div>
+              {/* Visual card */}
+              <div className="w-full md:w-1/2 bg-neutral-900 min-h-[360px] md:min-h-[420px] flex items-center justify-center">
+                {benefit.mockup}
               </div>
             </div>
           ))}
+        </div>
+
+        {/* CTA */}
+        <div className="mt-16 flex justify-center">
+          <Link
+            href="/auth"
+            className="bg-[#D4AF37] hover:bg-[#C5A028] text-black font-bold px-8 py-4 rounded-xl transition-all hover:scale-105 shadow-lg shadow-[#D4AF37]/30"
+          >
+            Comece gratuitamente
+          </Link>
         </div>
       </div>
     </section>

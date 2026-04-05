@@ -10,7 +10,7 @@ interface FAQItem {
 }
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const faqs: FAQItem[] = [
     {
@@ -51,58 +51,57 @@ export default function FAQ() {
 
   return (
     <section className="py-20 md:py-32 bg-black transition-colors overflow-hidden">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        
+      <div className="max-w-[750px] mx-auto px-4 sm:px-6">
+
         {/* HEADER */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#D4AF37] rounded-2xl mb-6">
-            <span className="text-3xl">💬</span>
-          </div>
-          
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Perguntas frequentes
+        <div className="mb-14">
+          {/* Chat bubble — standard circular outline, matches /recursos and /app */}
+          <svg
+            className="w-12 h-12 mx-auto mb-6 text-[#D4AF37]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+            />
+          </svg>
+
+          <h2 className="text-[56px] md:text-[64px] font-black leading-tight mb-4 text-center whitespace-nowrap">
+            <span className="text-white">Perguntas </span>
+            <span style={{ color: "#D4AF37" }}>Frequentes</span>
           </h2>
-          
-          <p className="text-base md:text-lg text-neutral-400 max-w-2xl mx-auto leading-relaxed">
-            Dúvidas comuns sobre o app e os infoprodutos. Se não encontrar sua resposta aqui, fale com a gente.
+
+          <p className="text-neutral-400 text-base text-center">
+            Dúvidas comuns sobre o app e os infoprodutos.
           </p>
         </div>
 
         {/* FAQ ACCORDION */}
-        <div className="space-y-4">
+        <div>
           {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="border-2 border-neutral-800 rounded-2xl overflow-hidden transition-all duration-300 hover:border-[#D4AF37]"
-            >
+            <div key={index} className="border-b border-neutral-800">
               {/* PERGUNTA */}
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full flex items-center justify-between p-6 md:p-8 text-left transition-colors"
+                className="w-full flex items-center justify-between py-5 text-left group hover:translate-x-1 transition-transform duration-200"
               >
-                <h3 className="text-lg md:text-xl font-bold text-white pr-4 leading-tight">
+                <h3 className="text-base font-semibold text-white pr-6 leading-snug">
                   {faq.question}
                 </h3>
-                
-                <div
-                  className={`flex-shrink-0 w-8 h-8 flex items-center justify-center transition-transform duration-300 ${
+                <svg
+                  className={`flex-shrink-0 w-5 h-5 text-white transition-transform duration-300 ${
                     openIndex === index ? "rotate-180" : ""
                   }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg
-                    className="w-6 h-6 text-neutral-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
 
               {/* RESPOSTA */}
@@ -111,25 +110,21 @@ export default function FAQ() {
                   openIndex === index ? "max-h-96" : "max-h-0"
                 }`}
               >
-                <div className="px-6 md:px-8 pb-6 md:pb-8 pt-0">
-                  <div className="border-t border-neutral-800 pt-6">
-                    <p className="text-sm md:text-base text-neutral-400 leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </div>
-                </div>
+                <p className="text-neutral-400 text-sm leading-relaxed pb-5">
+                  {faq.answer}
+                </p>
               </div>
             </div>
           ))}
         </div>
 
         {/* CTA FINAL */}
-        <div className="mt-16 text-center">
-          <p className="text-neutral-400 mb-6">
+        <div className="mt-12 text-center">
+          <p className="text-neutral-400">
             Ainda tem dúvidas?{" "}
             <a
               href="/contact"
-              className="text-[#D4AF37] hover:text-[#E5C158] font-semibold underline transition-colors"
+              className="text-[#D4AF37] hover:text-[#E5C158] font-semibold transition-colors"
             >
               Fale com a gente
             </a>

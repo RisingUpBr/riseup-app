@@ -35,7 +35,7 @@ export default function BeforeAfter() {
   }, []);
 
   const beforePoints = [
-    "Cabeça cheia de ideias sem saber por onde começar.",
+    "Cabeça cheia, sem saber por onde começar.",
     "Planejamento complexo que nunca é executado.",
     "Motivação passageira que some no dia seguinte.",
     "Procrastinação por excesso de opções.",
@@ -69,27 +69,39 @@ export default function BeforeAfter() {
     >
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full">
+          {/* TÍTULO */}
+          <div className="text-center mb-10">
+            <h2 className="text-6xl md:text-7xl font-black text-black dark:text-white leading-tight">
+              Sua vida:
+              <br />
+              antes &amp; depois.
+            </h2>
+            <p className="text-neutral-400 text-base max-w-[480px] mx-auto mt-5">
+              A diferença entre quem evolui e quem fica parado é um sistema.
+            </p>
+          </div>
+
           {/* CARDS LADO A LADO */}
           <div className="relative flex flex-col md:flex-row items-stretch justify-center gap-6">
             
             {/* BEFORE - Card Esquerdo */}
             <div
-              className="relative w-full md:w-[550px] bg-neutral-900 rounded-3xl p-10 md:p-14 border-2 border-neutral-800 transition-all duration-500 flex flex-col"
-              style={{ 
+              className="relative w-full md:w-[550px] bg-neutral-900 rounded-3xl p-10 md:p-12 border-2 border-neutral-800 transition-all duration-500 flex flex-col"
+              style={{
                 transform: `translateX(${beforeX}%)`,
                 zIndex: beforeZ,
-                minHeight: "600px" 
+                minHeight: "480px"
               }}
             >
-              <p className="text-sm font-semibold text-neutral-500 mb-4 uppercase tracking-wider">
-                Antes da Rise Up:
-              </p>
-              
-              <h3 className="text-4xl md:text-5xl font-bold text-white mb-10 leading-tight">
-                Caos e paralisia
-              </h3>
-
-              <div className="space-y-5 mb-auto">
+              <div className="min-h-[120px]">
+                <p className="text-sm font-semibold text-neutral-500 mb-4 uppercase tracking-wider">
+                  Antes da Rise Up:
+                </p>
+                <h3 className="text-[34px] md:text-[46px] font-bold text-white leading-tight">
+                  Caos e paralisia
+                </h3>
+              </div>
+              <div className="flex flex-col gap-3">
                 {beforePoints.map((point, index) => (
                   <div key={index} className="flex items-center justify-between gap-4">
                     <span className="text-base text-neutral-300 leading-relaxed flex-1">
@@ -106,7 +118,7 @@ export default function BeforeAfter() {
 
               <Link
                 href="/auth"
-                className="w-full mt-10 px-8 py-4 bg-white text-black rounded-full font-semibold hover:scale-[1.02] transition-transform text-center text-lg"
+                className="w-full mt-auto flex items-center justify-center px-8 py-4 bg-white text-black rounded-full font-semibold hover:scale-[1.02] transition-transform text-lg"
               >
                 Sair do caos
               </Link>
@@ -114,22 +126,22 @@ export default function BeforeAfter() {
 
             {/* AFTER - Card Direito */}
             <div
-              className="relative w-full md:w-[550px] bg-gradient-to-br from-[#0D4D3D] to-[#0A3D2F] rounded-3xl p-10 md:p-14 border-2 border-[#D4AF37] shadow-2xl transition-all duration-500 flex flex-col"
-              style={{ 
+              className="relative w-full md:w-[550px] bg-gradient-to-br from-[#0D4D3D] to-[#0A3D2F] rounded-3xl p-10 md:p-12 border-2 border-[#D4AF37] shadow-2xl transition-all duration-500 flex flex-col"
+              style={{
                 transform: `translateX(${afterX}%)`,
                 zIndex: afterZ,
-                minHeight: "600px" 
+                minHeight: "480px"
               }}
             >
-              <p className="text-sm font-semibold text-[#D4AF37] mb-4 uppercase tracking-wider">
-                Depois da Rise Up:
-              </p>
-              
-              <h3 className="text-4xl md:text-5xl font-bold text-white mb-10 leading-tight">
-                Clareza e execução
-              </h3>
-
-              <div className="space-y-5 mb-auto">
+              <div className="min-h-[120px]">
+                <p className="text-sm font-semibold text-[#D4AF37] mb-4 uppercase tracking-wider">
+                  Depois da Rise Up:
+                </p>
+                <h3 className="text-[34px] md:text-[46px] font-bold text-white leading-tight whitespace-nowrap">
+                  Clareza e execução
+                </h3>
+              </div>
+              <div className="flex flex-col gap-3">
                 {afterPoints.map((point, index) => (
                   <div key={index} className="flex items-center justify-between gap-4">
                     <span className="text-base text-white leading-relaxed flex-1">
@@ -146,7 +158,7 @@ export default function BeforeAfter() {
 
               <Link
                 href="/auth"
-                className="w-full mt-10 px-8 py-4 bg-[#D4AF37] hover:bg-[#E5C158] text-black rounded-full font-semibold hover:scale-[1.02] transition-transform text-center text-lg"
+                className="w-full mt-auto flex items-center justify-center px-8 py-4 bg-[#D4AF37] hover:bg-[#E5C158] text-black rounded-full font-semibold hover:scale-[1.02] transition-transform text-lg"
               >
                 Começar agora
               </Link>
