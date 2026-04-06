@@ -151,7 +151,8 @@ export default function Sidebar() {
 
   function getPlanLabel() {
     if (isPremium) {
-      return { quinzenal: "Quinzenal", mensal: "Mensal", anual: "Anual" }[specificPlan ?? ""] ?? "Premium";
+      const planLabels: Record<string, string> = { quinzenal: "Quinzenal", mensal: "Mensal", anual: "Anual" };
+      return planLabels[specificPlan ?? ""] ?? "Premium";
     }
     return "Free";
   }
