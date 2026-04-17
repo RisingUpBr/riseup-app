@@ -1,0 +1,121 @@
+interface DiaryPrompt {
+  text: string;
+  author: string;
+  moods: number[];
+}
+
+export const DIARY_PROMPTS: DiaryPrompt[] = [
+  { text: "Você tem poder sobre sua mente, não sobre eventos externos. Perceba isso e encontrará força.", author: "Marco Aurélio", moods: [0, 1] },
+  { text: "Não desperdice mais tempo discutindo como um bom homem deve ser. Seja um.", author: "Marco Aurélio", moods: [2, 3, 4] },
+  { text: "A maior glória não está em nunca cair, mas em se levantar cada vez que cairmos.", author: "Confúcio", moods: [0, 1] },
+  { text: "Aquele que tem um porquê para viver pode suportar quase qualquer como.", author: "Viktor Frankl", moods: [0, 1] },
+  { text: "O homem que move montanhas começa carregando pequenas pedras.", author: "Confúcio", moods: [1, 2, 3] },
+  { text: "A qualidade de sua vida é determinada pela qualidade de suas perguntas.", author: "Tony Robbins", moods: [2, 3, 4] },
+  { text: "Seja a mudança que você deseja ver no mundo.", author: "Mahatma Gandhi", moods: [2, 3, 4] },
+  { text: "A disciplina é a ponte entre metas e realizações.", author: "Jim Rohn", moods: [1, 2, 3] },
+  { text: "O sucesso é a soma de pequenos esforços repetidos dia após dia.", author: "Robert Collier", moods: [2, 3] },
+  { text: "Não espere. A hora nunca será exatamente certa.", author: "Napoleão Hill", moods: [1, 2, 3] },
+  { text: "A vida é o que você faz dela. Sempre foi. Sempre será.", author: "Eleanor Roosevelt", moods: [2, 3, 4] },
+  { text: "Quem olha para fora, sonha. Quem olha para dentro, acorda.", author: "Carl Jung", moods: [0, 1, 2, 3] },
+  { text: "Não há vento favorável para quem não sabe para onde vai.", author: "Sêneca", moods: [1, 2] },
+  { text: "O momento presente sempre terá sido.", author: "Anônimo", moods: [0, 1, 2, 3, 4] },
+  { text: "Cuide de seus pensamentos, pois eles se tornam ações.", author: "Lao-Tsé", moods: [2, 3, 4] },
+  { text: "Você não pode voltar e mudar o começo, mas pode começar agora e mudar o fim.", author: "C.S. Lewis", moods: [0, 1, 2] },
+  { text: "A força não vem de vencer. Suas lutas desenvolvem suas forças.", author: "Arnold Schwarzenegger", moods: [0, 1] },
+  { text: "O que estamos hoje é resultado do que pensamos ontem.", author: "Buda", moods: [0, 1, 2, 3, 4] },
+  { text: "A gratidão transforma o que temos em suficiente.", author: "Aesop", moods: [3, 4] },
+  { text: "Você é mais corajoso do que acredita e mais forte do que parece.", author: "A.A. Milne", moods: [0, 1, 2] },
+  { text: "A única maneira de fazer um excelente trabalho é amar o que você faz.", author: "Steve Jobs", moods: [3, 4] },
+  { text: "A vida começa no fim da sua zona de conforto.", author: "Neale Donald Walsch", moods: [2, 3, 4] },
+  { text: "A perfeição é inimiga do bem.", author: "Voltaire", moods: [1, 2, 3] },
+  { text: "Tudo que você deseja está do outro lado do medo.", author: "George Addair", moods: [0, 1, 2] },
+  { text: "Um homem que domina a si mesmo é mais poderoso que aquele que domina cidades.", author: "Provérbio", moods: [2, 3, 4] },
+  { text: "Acredite que você pode e você já está na metade do caminho.", author: "Theodore Roosevelt", moods: [1, 2, 3] },
+  { text: "O segredo para avançar é começar.", author: "Mark Twain", moods: [1, 2, 3] },
+  { text: "Conhece-te a ti mesmo.", author: "Sócrates", moods: [0, 1, 2, 3, 4] },
+  { text: "Nenhuma tempestade pode durar para sempre.", author: "Anônimo", moods: [0, 1] },
+  { text: "Não chore porque acabou. Sorria porque aconteceu.", author: "Gabriel García Márquez", moods: [0, 1] },
+  { text: "A riqueza consiste muito mais em desfrutar do que em possuir.", author: "Aristóteles", moods: [3, 4] },
+  { text: "Seja você mesmo; todos os outros já estão ocupados.", author: "Oscar Wilde", moods: [3, 4] },
+  { text: "A vida é curta demais para ser pequena.", author: "Benjamin Disraeli", moods: [2, 3, 4] },
+  { text: "Sofra agora e viva o resto de sua vida como um campeão.", author: "Muhammad Ali", moods: [0, 1, 2] },
+  { text: "Ouse começar. A coragem traz consigo o gênio, o poder e a magia.", author: "Goethe", moods: [2, 3, 4] },
+  { text: "A vida não é o que acontece com você, mas o que você faz com o que acontece.", author: "Epicteto", moods: [0, 1, 2] },
+  { text: "Não é o que nos acontece, mas nossa resposta ao que acontece que nos define.", author: "Epicteto", moods: [0, 1] },
+  { text: "O silêncio é a linguagem de quem sabe que nem tudo precisa ser dito.", author: "Provérbio Zen", moods: [2, 3] },
+  { text: "Sua tarefa não é prever o futuro, mas estar preparado para ele.", author: "Péricles", moods: [2, 3] },
+  { text: "Eles podem porque acreditam que podem.", author: "Virgílio", moods: [2, 3, 4] },
+  { text: "O que você planta agora, você colherá mais tarde.", author: "Og Mandino", moods: [1, 2, 3] },
+  { text: "A virtude está na luta, não no prêmio.", author: "Schiller", moods: [0, 1, 2] },
+  { text: "A maior arma contra o estresse é nossa capacidade de escolher um pensamento sobre outro.", author: "William James", moods: [0, 1] },
+  { text: "A perda é apenas a transformação do que amamos.", author: "Anônimo", moods: [0, 1] },
+  { text: "Faça cada dia o melhor que puder. Este é o único jeito de preparar o futuro.", author: "Albert Einstein", moods: [2, 3] },
+  { text: "Toda grande conquista já foi considerada impossível antes de acontecer.", author: "Anônimo", moods: [2, 3, 4] },
+  { text: "Não existe amanhã sem hoje.", author: "Provérbio", moods: [1, 2, 3, 4] },
+  { text: "Perde quem desiste. Vence quem insiste.", author: "Provérbio", moods: [0, 1, 2] },
+  { text: "Quem não é suficientemente corajoso para correr riscos não conseguirá nada na vida.", author: "Muhammad Ali", moods: [2, 3, 4] },
+  { text: "A maior revolução da nossa geração é a descoberta de que seres humanos podem mudar suas vidas mudando suas atitudes mentais.", author: "William James", moods: [1, 2, 3] },
+  { text: "Você não precisa ser perfeito. Precisa ser real.", author: "Anônimo", moods: [0, 1, 2] },
+  { text: "A sabedoria começa no maravilhamento.", author: "Sócrates", moods: [3, 4] },
+  { text: "Viva como se fosse morrer amanhã. Aprenda como se fosse viver para sempre.", author: "Mahatma Gandhi", moods: [2, 3, 4] },
+  { text: "A dor é temporária. Desistir dura para sempre.", author: "Lance Armstrong", moods: [0, 1] },
+  { text: "Quando não puder correr, trote. Quando não puder trotar, caminhe. Quando não puder caminhar, use uma bengala. Mas nunca pare.", author: "Madre Teresa", moods: [0, 1] },
+  { text: "O homem sábio não diz tudo o que pensa, mas sempre pensa tudo o que diz.", author: "Aristóteles", moods: [2, 3] },
+  { text: "Não importa o quão devagar você vá, desde que não pare.", author: "Confúcio", moods: [0, 1, 2] },
+  { text: "A felicidade não é algo pronto. Ela vem de suas próprias ações.", author: "Dalai Lama", moods: [2, 3, 4] },
+  { text: "Em meio a toda dificuldade encontra-se oportunidade.", author: "Albert Einstein", moods: [0, 1] },
+  { text: "Quem teme sofrer já sofre o que teme.", author: "Montaigne", moods: [0, 1] },
+  { text: "A esperança é o sonho do homem acordado.", author: "Aristóteles", moods: [1, 2, 3] },
+  { text: "Não basta dar passos que um dia nos levarão a determinado objetivo. Cada passo precisa ser um objetivo.", author: "Goethe", moods: [2, 3] },
+  { text: "O coração que ama está sempre jovem.", author: "Provérbio Grego", moods: [3, 4] },
+  { text: "A única coisa pior do que ser cego é ter visão e nenhuma percepção.", author: "Helen Keller", moods: [1, 2] },
+  { text: "Quando você muda a forma como olha para as coisas, as coisas que você olha mudam.", author: "Wayne Dyer", moods: [1, 2, 3] },
+  { text: "Não tenha medo de desistir do bom para ir atrás do ótimo.", author: "John D. Rockefeller", moods: [2, 3, 4] },
+  { text: "Só existem dois dias no ano em que nada pode ser feito. Um se chama ontem e o outro amanhã.", author: "Dalai Lama", moods: [1, 2, 3] },
+  { text: "A jornada de mil milhas começa com um único passo.", author: "Lao-Tsé", moods: [1, 2, 3] },
+  { text: "Seja gentil, pois cada pessoa que você encontra está travando uma batalha difícil.", author: "Platão", moods: [0, 1, 2, 3] },
+  { text: "O que fazemos em vida ecoa na eternidade.", author: "Marco Aurélio", moods: [2, 3, 4] },
+  { text: "Antes de curar alguém, pergunte se ele está disposto a abrir mão das coisas que o adoeceram.", author: "Hipócrates", moods: [0, 1, 2] },
+  { text: "A beleza está nos olhos de quem vê.", author: "Oscar Wilde", moods: [3, 4] },
+  { text: "O homem que lê demais e usa o cérebro de menos cai no hábito da preguiça mental.", author: "Albert Einstein", moods: [1, 2] },
+  { text: "Aja como se o que você faz faz diferença. Porque faz.", author: "William James", moods: [1, 2, 3, 4] },
+  { text: "Se você quer ir rápido, vá sozinho. Se quer ir longe, vá acompanhado.", author: "Provérbio Africano", moods: [2, 3, 4] },
+  { text: "Toda a nossa ciência, comparada com a realidade, é primitiva e infantil.", author: "Albert Einstein", moods: [2, 3] },
+  { text: "Nunca é tarde demais para ser o que você poderia ter sido.", author: "George Eliot", moods: [0, 1, 2] },
+  { text: "Sonhe alto. Comece pequeno. Aja agora.", author: "Robin Sharma", moods: [2, 3, 4] },
+  { text: "A verdade é raramente pura e nunca simples.", author: "Oscar Wilde", moods: [1, 2] },
+  { text: "Cada dia é uma nova chance para mudar sua vida.", author: "Anônimo", moods: [0, 1, 2, 3, 4] },
+  { text: "A imaginação é mais importante que o conhecimento.", author: "Albert Einstein", moods: [3, 4] },
+  { text: "Você nunca é velho demais para estabelecer um novo objetivo ou sonhar um novo sonho.", author: "C.S. Lewis", moods: [2, 3, 4] },
+  { text: "A maior descoberta de qualquer geração é que um ser humano pode alterar sua vida mudando sua atitude.", author: "William James", moods: [1, 2, 3] },
+  { text: "Não podemos resolver nossos problemas com o mesmo pensamento que usamos quando os criamos.", author: "Albert Einstein", moods: [0, 1, 2] },
+  { text: "O sucesso não é final, o fracasso não é fatal. O que conta é a coragem de continuar.", author: "Winston Churchill", moods: [0, 1, 2] },
+  { text: "O pessimista vê dificuldade em cada oportunidade. O otimista vê oportunidade em cada dificuldade.", author: "Winston Churchill", moods: [0, 1, 2, 3] },
+  { text: "Ninguém pode fazer você se sentir inferior sem o seu consentimento.", author: "Eleanor Roosevelt", moods: [0, 1] },
+  { text: "A vida não exige que sejamos os melhores, apenas que tentemos o nosso melhor.", author: "H. Jackson Brown Jr.", moods: [0, 1, 2] },
+  { text: "A gratidão é a memória do coração.", author: "Jean Baptiste Massieu", moods: [3, 4] },
+  { text: "O que você é grita tão alto que não consigo ouvir o que você diz.", author: "Ralph Waldo Emerson", moods: [2, 3] },
+  { text: "A liberdade não é a ausência de compromisso, mas a capacidade de escolher.", author: "Paulo Coelho", moods: [2, 3, 4] },
+  { text: "O dia em que você plantar a semente não é o dia em que você come o fruto.", author: "Fabrice Muamba", moods: [1, 2, 3] },
+  { text: "Há uma força motriz mais poderosa que o vapor, a eletricidade e a energia atômica: a vontade.", author: "Albert Einstein", moods: [2, 3, 4] },
+  { text: "O conhecimento fala, mas a sabedoria escuta.", author: "Jimi Hendrix", moods: [2, 3] },
+  { text: "Toda mudança começa com uma única palavra: sim.", author: "Anônimo", moods: [1, 2, 3, 4] },
+  { text: "O presente é o único tempo que possuímos e o único em que podemos agir.", author: "Anônimo", moods: [0, 1, 2, 3, 4] },
+  { text: "Não trate o que foi dado levemente, mas não segure o que deve ir.", author: "Provérbio Zen", moods: [0, 1, 2] },
+  { text: "A vida é uma viagem, não um destino.", author: "Ralph Waldo Emerson", moods: [2, 3, 4] },
+];
+
+export function getDailyPrompt(mood: number | null): DiaryPrompt {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86400000);
+
+  if (mood !== null) {
+    const filtered = DIARY_PROMPTS.filter((p) => p.moods.includes(mood));
+    if (filtered.length > 0) {
+      return filtered[dayOfYear % filtered.length];
+    }
+  }
+
+  return DIARY_PROMPTS[dayOfYear % DIARY_PROMPTS.length];
+}

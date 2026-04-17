@@ -6,7 +6,9 @@
       "Bash(mkdir -p \"c:/Users/Usuario/riseup-app/public/images\")",
       "Bash(cp \"c:/Users/Usuario/riseup-app/public/logo/Logo transparente RiseUp Dourado e preto \\(1\\).png\" \"c:/Users/Usuario/riseup-app/public/images/logo.png\")",
       "Bash(mv \"Logo transparente RiseUp Dourado e preto \\(1\\).png\" \"logo-dourado.png\")",
-      "Bash(mv \"Logo transparente RiseUp Branco e preto \\(1\\).png\" \"logo-branco.png\")"
+      "Bash(mv \"Logo transparente RiseUp Branco e preto \\(1\\).png\" \"logo-branco.png\")",
+      "Bash(npm run:*)",
+      "Bash(node -e \"require\\('firebase/storage'\\)\")"
     ]
   }
 }

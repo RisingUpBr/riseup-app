@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuthUser } from "@/hooks/useAuthUser";
+import { extractNameFromEmail } from "@/lib/extractName";
 
 const GOALS = [
   { value: "estudar", label: "Estudar mais", desc: "Concursos, faculdade, idiomas" },
@@ -12,11 +13,6 @@ const GOALS = [
   { value: "crescimento", label: "Crescer pessoal", desc: "Metas, reflexão, foco" },
 ];
 
-function extractNameFromEmail(email: string): string {
-  const local = email.split("@")[0];
-  const clean = local.replace(/[^a-zA-ZÀ-ÿ]/g, " ").trim().split(" ")[0];
-  return clean.charAt(0).toUpperCase() + clean.slice(1).toLowerCase();
-}
 
 export default function OnboardingPage() {
   const router = useRouter();

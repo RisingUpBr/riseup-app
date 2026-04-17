@@ -2,7 +2,23 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthUser } from "@/hooks/useAuthUser";
+import { useTheme } from "@/contexts/ThemeContext";
 import Sidebar from "@/components/Sidebar";
+
+function AppShell({ children }: { children: React.ReactNode }) {
+  const { theme } = useTheme();
+  return (
+    <div
+      className="flex h-screen overflow-hidden"
+      style={{ background: "var(--app-bg)" }}
+    >
+      <Sidebar />
+      <main className="flex-1 ml-64 overflow-y-auto" style={{ background: "var(--app-bg)" }}>
+        {children}
+      </main>
+    </div>
+  );
+}
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -18,8 +34,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-[#D4AF37] border-t-transparent animate-spin" />
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--app-bg)" }}>
+        <div className="w-7 h-7 rounded-full border-2 border-[#D4AF37] border-t-transparent animate-spin" />
       </div>
     );
   }
@@ -27,11 +43,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (!user) return null;
 
   return (
-    <div className="flex h-screen bg-[#0A0A0A] text-white overflow-hidden">
-      <Sidebar />
-      <main className="flex-1 ml-64 overflow-y-auto">
-        {children}
-      </main>
-    </div>
+    <AppShell>
+      {children}
+    </AppShell>
   );
 }
