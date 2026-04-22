@@ -1,6 +1,6 @@
 import {
   collection, addDoc, updateDoc, deleteDoc,
-  doc, query, where, orderBy, onSnapshot,
+  doc, query, where, onSnapshot,
   serverTimestamp, Timestamp, getDocs, writeBatch,
 } from "firebase/firestore";
 import { db } from "./firebase";
@@ -36,11 +36,19 @@ export function subscribeToDecks(
 ): () => void {
   const q = query(
     collection(db, "decks"),
-    where("userId", "==", userId),
-    orderBy("updatedAt", "desc")
+    where("userId", "==", userId)
   );
   return onSnapshot(q, (snap) => {
-    callback(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Deck)));
+    const decks = snap.docs
+      .map((d) => ({ id: d.id, ...d.data() } as Deck))
+      .sort((a, b) => {
+        const at = a.updatedAt?.toDate?.()?.getTime() ?? 0;
+        const bt = b.updatedAt?.toDate?.()?.getTime() ?? 0;
+        return bt - at;
+      });
+    callback(decks);
+  }, (error) => {
+    console.error("subscribeToDecks error:", error);
   });
 }
 
@@ -50,11 +58,19 @@ export function subscribeToCards(
 ): () => void {
   const q = query(
     collection(db, "flashcards"),
-    where("deckId", "==", deckId),
-    orderBy("createdAt", "asc")
+    where("deckId", "==", deckId)
   );
   return onSnapshot(q, (snap) => {
-    callback(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Flashcard)));
+    const cards = snap.docs
+      .map((d) => ({ id: d.id, ...d.data() } as Flashcard))
+      .sort((a, b) => {
+        const at = a.createdAt?.toDate?.()?.getTime() ?? 0;
+        const bt = b.createdAt?.toDate?.()?.getTime() ?? 0;
+        return at - bt;
+      });
+    callback(cards);
+  }, (error) => {
+    console.error("subscribeToCards error:", error);
   });
 }
 
