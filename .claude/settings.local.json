@@ -8,7 +8,11 @@
       "Bash(mv \"Logo transparente RiseUp Dourado e preto \\(1\\).png\" \"logo-dourado.png\")",
       "Bash(mv \"Logo transparente RiseUp Branco e preto \\(1\\).png\" \"logo-branco.png\")",
       "Bash(npm run:*)",
-      "Bash(node -e \"require\\('firebase/storage'\\)\")"
+      "Bash(node -e \"require\\('firebase/storage'\\)\")",
+      "Read(//d/Área de trabalho/**)",
+      "Read(//d/Area de trabalho/**)",
+      "Bash(find /d -maxdepth 4 -name \"AI_CONTEXT.md\")",
+      "PowerShell(Get-ChildItem \"D:\\\\Área de trabalho\\\\Arquivos Claude e Codex\" -ErrorAction SilentlyContinue; Get-ChildItem \"D:\\\\Desktop\\\\Arquivos Claude e Codex\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:USERPROFILE\\\\Desktop\\\\Arquivos Claude e Codex\" -ErrorAction SilentlyContinue)"
     ]
   }
 }
