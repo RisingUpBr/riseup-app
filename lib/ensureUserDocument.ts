@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "./firebase";
 import { APP_PLANS } from "./appPlans";
 import { extractNameFromEmail } from "./extractName";
@@ -12,19 +12,6 @@ export async function ensureUserDocument(user: {
     const snap = await getDoc(ref);
 
     if (snap.exists()) {
-      const data = snap.data();
-      const currentName = data.name as string | undefined;
-      if (!currentName || currentName === currentName.toLowerCase()) {
-        if (user.email) {
-          try {
-            await updateDoc(ref, {
-              name: extractNameFromEmail(user.email),
-            });
-          } catch {
-            // silently ignore update errors
-          }
-        }
-      }
       return;
     }
 
@@ -41,7 +28,7 @@ export async function ensureUserDocument(user: {
       limits: {
         simpleNotes: 10,
         dailyNotes: 5,
-        mindmaps: 0,
+        mindmaps: 3,
         manualFlashcards: 20,
         aiFlashcards: 3,
         aiRoutineGenerator: 1,
@@ -58,7 +45,7 @@ export async function ensureUserDocument(user: {
         goalPlanner: 0,
         aiOrganizer: 0,
       },
-    });
+    }, { merge: true });
   } catch (err) {
     console.error("ensureUserDocument error:", err);
   }

@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useAuthUser } from "@/hooks/useAuthUser";
+import { GOAL_TEMPLATES } from "@/lib/goalTemplates";
 import ConfirmModal from "@/components/ConfirmModal";
 import {
-  Goal, GoalCategory, Milestone,
+  Goal, GoalCategory, GoalPriority, Milestone,
   GOAL_CATEGORIES,
   subscribeToGoals, createGoal, updateGoal, deleteGoal,
   calcProgress, genMilestoneId, daysUntilDeadline,
@@ -70,6 +71,7 @@ function GoalForm({ initial, onSave, onCancel }: {
   const [category, setCategory] = useState<GoalCategory>(initial?.category ?? "personal");
   const [customCategory, setCustomCategory] = useState(initial?.customCategory ?? "");
   const [deadline, setDeadline] = useState(initial?.deadline ?? "");
+  const [priority, setPriority] = useState<GoalPriority>(initial?.priority ?? 2);
   const [why, setWhy] = useState(initial?.why ?? "");
   const [vision, setVision] = useState(initial?.vision ?? "");
   const [milestones, setMilestones] = useState<Milestone[]>(initial?.milestones ?? []);
@@ -87,7 +89,7 @@ function GoalForm({ initial, onSave, onCancel }: {
     onSave({
       title, emoji, category, customCategory,
       why, vision, deadline, status: initial?.status ?? "active",
-      milestones, color: cat.color,
+      milestones, color: cat.color, priority,
     });
   }
 
@@ -126,6 +128,40 @@ function GoalForm({ initial, onSave, onCancel }: {
       {/* STEP 1: BÁSICO */}
       {step === "basic" && (
         <div className="space-y-4">
+          {/* Templates rápidos */}
+          <div className="mb-4">
+            <details className="group">
+              <summary className="flex items-center justify-between cursor-pointer py-2 text-[13px] font-semibold list-none"
+                style={{ color: "var(--text-muted)" }}>
+                ✦ Usar template de meta
+                <svg className="group-open:rotate-180 transition-transform" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
+              </summary>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                {GOAL_TEMPLATES.map(tpl => (
+                  <button key={tpl.id}
+                    onClick={() => {
+                      setTitle(tpl.title);
+                      setEmoji(tpl.emoji);
+                      setCategory(tpl.category);
+                      setWhy(tpl.why);
+                      const deadline = new Date();
+                      deadline.setMonth(deadline.getMonth() + tpl.deadlineMonths);
+                      setDeadline(deadline.toISOString().split("T")[0].slice(0, 7) + "-01");
+                      setMilestones(tpl.milestones.map((m, i) => ({ ...m, id: `tpl_${i}` })));
+                    }}
+                    className="flex items-start gap-2 p-3 rounded-xl border text-left transition-all"
+                    style={{ background: "var(--app-bg-3)", borderColor: "var(--app-border)", color: "var(--text-secondary)" }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--gold)"}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--app-border)"}>
+                    <span className="text-[18px]">{tpl.emoji}</span>
+                    <p className="text-[12px] font-medium leading-snug">{tpl.title}</p>
+                  </button>
+                ))}
+              </div>
+            </details>
+          </div>
           <div className="flex gap-3">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-wide mb-2" style={{ color: "var(--text-muted)" }}>Emoji</p>
@@ -168,6 +204,27 @@ function GoalForm({ initial, onSave, onCancel }: {
             <input type="month" value={deadline.slice(0, 7)} onChange={e => setDeadline(e.target.value + "-01")}
               className="w-full px-3 py-2.5 rounded-xl text-[14px] border outline-none"
               style={{ background: "var(--app-bg-3)", borderColor: "var(--app-border-2)", color: "var(--text-primary)" }} />
+          </div>
+
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wide mb-2" style={{ color: "var(--text-muted)" }}>Prioridade</p>
+            <div className="flex gap-2">
+              {([1, 2, 3] as const).map(p => {
+                const labels = { 1: "Alta", 2: "Normal", 3: "Baixa" };
+                const colors = { 1: "#ef4444", 2: "var(--gold)", 3: "var(--text-muted)" };
+                return (
+                  <button key={p} onClick={() => setPriority(p)}
+                    className="flex-1 py-2 rounded-xl text-[13px] font-bold border transition-all"
+                    style={{
+                      background: priority === p ? `${colors[p]}18` : "transparent",
+                      borderColor: priority === p ? colors[p] : "var(--app-border)",
+                      color: priority === p ? colors[p] : "var(--text-muted)",
+                    }}>
+                    {labels[p]}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <button onClick={() => setStep("why")} disabled={!title.trim() || !deadline}
@@ -495,25 +552,48 @@ export default function GoalsPage() {
   return (
     <div className="flex flex-col h-screen" style={{ background: "var(--app-bg)" }}>
 
-      {/* TOPBAR */}
-      <div className="border-b flex-shrink-0" style={{ borderColor: "var(--app-border)" }}>
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-[22px] font-bold" style={{ color: "var(--text-primary)" }}>Metas</h1>
-            {active.length > 0 && (
-              <p className="text-[12px] mt-0.5" style={{ color: "var(--text-muted)" }}>
-                {active.length} ativa{active.length !== 1 ? "s" : ""} · média {avg}%
-              </p>
-            )}
+      {/* TOPBAR — alinhado com o conteúdo */}
+      <div className="border-b flex-shrink-0" style={{ borderColor: "var(--app-border)", background: "var(--app-bg-2)" }}>
+        <div style={{ maxWidth: "calc(100% - 288px)", marginRight: "288px" }}>
+          <div className="px-8 py-5 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div>
+                <h1 className="text-[24px] font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>Metas</h1>
+                <p className="text-[12px] mt-0.5" style={{ color: "var(--text-muted)" }}>
+                  {active.length > 0
+                    ? `${active.length} ativa${active.length !== 1 ? "s" : ""} · média ${avg}%`
+                    : "Defina o que você quer conquistar"}
+                </p>
+              </div>
+              {active.length > 0 && (
+                <div className="flex items-center gap-2 pl-4 border-l" style={{ borderColor: "var(--app-border-2)" }}>
+                  {[
+                    { label: "Ativas", value: active.length, color: "var(--gold)" },
+                    { label: "Concluídas", value: completed.length, color: "var(--success)" },
+                  ].map(m => (
+                    <div key={m.label} className="px-3 py-1.5 rounded-xl border text-center"
+                      style={{ background: "var(--app-bg-3)", borderColor: "var(--app-border)" }}>
+                      <p className="text-[10px]" style={{ color: "var(--text-faint)" }}>{m.label}</p>
+                      <p className="text-[18px] font-black" style={{ color: m.color, lineHeight: 1.1 }}>{m.value}</p>
+                    </div>
+                  ))}
+                  <div className="px-3 py-1.5 rounded-xl border text-center"
+                    style={{ background: "var(--gold-bg)", borderColor: "var(--gold)" }}>
+                    <p className="text-[10px]" style={{ color: "var(--gold)" }}>Progresso</p>
+                    <p className="text-[18px] font-black" style={{ color: "var(--gold)", lineHeight: 1.1 }}>{avg}%</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <button onClick={() => { setActiveGoal(null); setScreen("new-goal"); }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[14px] font-bold transition-all hover:scale-[1.01] flex-shrink-0"
+              style={{ background: "var(--gold)", color: "#000" }}>
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              Nova meta
+            </button>
           </div>
-          <button onClick={() => { setActiveGoal(null); setScreen("new-goal"); }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-bold transition-all hover:scale-[1.01]"
-            style={{ background: "var(--gold)", color: "#000" }}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-            </svg>
-            Nova meta
-          </button>
         </div>
       </div>
 
@@ -535,7 +615,7 @@ export default function GoalsPage() {
 
           {/* MAIN */}
           <div className="flex-1 overflow-y-auto">
-            <div className="max-w-3xl mx-auto px-6 py-6">
+            <div className="px-8 py-6">
 
               {/* Filtros por categoria */}
               <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
@@ -613,42 +693,50 @@ export default function GoalsPage() {
                 );
               })()}
 
-              {/* Demais metas */}
-              <div className="grid grid-cols-2 gap-3">
-                {filtered.filter(g => {
-                  const featured = [...filtered.filter(x => x.status === "active")].sort((a, b) => calcProgress(b) - calcProgress(a))[0];
-                  return g.id !== featured?.id;
-                }).map(goal => {
+              {/* Demais metas — ordenadas por prioridade */}
+              {(() => {
+                const featured = [...filtered.filter(x => x.status === "active")].sort((a, b) => calcProgress(b) - calcProgress(a))[0];
+                const rest = filtered.filter(g => g.id !== featured?.id)
+                  .sort((a, b) => (a.priority ?? 2) - (b.priority ?? 2));
+                const highPriority = rest.filter(g => (g.priority ?? 2) === 1);
+                const normalPriority = rest.filter(g => (g.priority ?? 2) === 2);
+                const lowPriority = rest.filter(g => (g.priority ?? 2) === 3);
+
+                const GoalCard = ({ goal, large = false }: { goal: Goal; large?: boolean }) => {
                   const cat = GOAL_CATEGORIES.find(c => c.id === goal.category)!;
                   const prog = calcProgress(goal);
                   const days = daysUntilDeadline(goal.deadline);
                   return (
-                    <div key={goal.id}
+                    <div
                       className="p-4 rounded-2xl border cursor-pointer transition-all"
-                      style={{
-                        background: "var(--app-bg-2)",
-                        borderColor: "var(--app-border)",
-                        borderLeft: `3px solid ${goal.color}`,
-                        opacity: goal.status === "completed" ? 0.7 : 1,
-                      }}
+                      style={{ background: "var(--app-bg-2)", borderColor: "var(--app-border)", borderLeft: `3px solid ${goal.color}`, opacity: goal.status === "completed" ? 0.7 : 1 }}
                       onClick={() => { setActiveGoal(goal); setScreen("goal-detail"); }}
                       onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = `${goal.color}60`}
                       onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--app-border)"}>
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-[22px]">{goal.emoji}</span>
+                          <span style={{ fontSize: large ? 26 : 22 }}>{goal.emoji}</span>
                           <div>
-                            <p className="text-[14px] font-bold leading-tight"
-                              style={{ color: goal.status === "completed" ? "var(--text-muted)" : "var(--text-primary)", textDecoration: goal.status === "completed" ? "line-through" : "none" }}>
+                            <p style={{ fontSize: large ? 16 : 14, fontWeight: 700, color: goal.status === "completed" ? "var(--text-muted)" : "var(--text-primary)", textDecoration: goal.status === "completed" ? "line-through" : "none" }}>
                               {goal.title}
                             </p>
-                            <p className="text-[10px] mt-0.5" style={{ color: "var(--text-faint)" }}>
-                              {formatDeadline(goal.deadline)}
-                            </p>
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full"
+                                style={{ background: `${goal.color}15`, color: goal.color }}>
+                                {cat.emoji} {cat.label}
+                              </span>
+                              <span className="text-[10px]" style={{ color: "var(--text-faint)" }}>
+                                {formatDeadline(goal.deadline)}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <span className="text-[16px] font-black flex-shrink-0 ml-2"
-                          style={{ color: goal.color }}>{prog}%</span>
+                        <div className="text-right flex-shrink-0 ml-2">
+                          <span style={{ fontSize: large ? 20 : 16, fontWeight: 900, color: goal.color, lineHeight: 1 }}>{prog}%</span>
+                          {(goal.priority ?? 2) === 1 && (
+                            <div className="text-[9px] mt-0.5 font-bold" style={{ color: "#ef4444" }}>ALTA PRIORIDADE</div>
+                          )}
+                        </div>
                       </div>
                       <div className="h-1.5 rounded-full overflow-hidden mb-2" style={{ background: "var(--app-border)" }}>
                         <div className="h-full rounded-full transition-all" style={{ width: `${prog}%`, background: goal.color }} />
@@ -657,38 +745,49 @@ export default function GoalsPage() {
                         <span className="text-[10px]" style={{ color: "var(--text-faint)" }}>
                           {goal.milestones.filter(m => m.completed).length}/{goal.milestones.length} marcos
                         </span>
-                        {goal.status === "completed" ? (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
-                            style={{ background: "rgba(74,222,128,0.1)", color: "var(--success)" }}>Concluída</span>
-                        ) : (
-                          <span className="text-[10px]" style={{ color: days < 30 && days > 0 ? "#ef4444" : "var(--text-faint)" }}>
-                            {days > 0 ? `${days}d` : days === 0 ? "Hoje" : "Vencido"}
-                          </span>
-                        )}
+                        <span className="text-[10px]" style={{ color: days < 30 && days > 0 ? "#ef4444" : "var(--text-faint)" }}>
+                          {goal.status === "completed" ? "Concluída" : days > 0 ? `${days}d` : days === 0 ? "Hoje" : "Vencido"}
+                        </span>
                       </div>
                     </div>
                   );
-                })}
-              </div>
+                };
+
+                return (
+                  <div className="space-y-3">
+                    {highPriority.map(g => <GoalCard key={g.id} goal={g} large />)}
+                    {normalPriority.length > 0 && (
+                      <div className="grid grid-cols-2 gap-3">
+                        {normalPriority.map(g => <GoalCard key={g.id} goal={g} />)}
+                      </div>
+                    )}
+                    {lowPriority.length > 0 && (
+                      <div className="grid grid-cols-3 gap-3">
+                        {lowPriority.map(g => <GoalCard key={g.id} goal={g} />)}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           </div>
 
-          {/* SIDEBAR */}
-          <div className="w-60 border-l flex-shrink-0 overflow-y-auto px-4 py-5"
+          {/* SIDEBAR — maior */}
+          <div className="w-72 border-l flex-shrink-0 overflow-y-auto px-5 py-6"
             style={{ borderColor: "var(--app-border)", background: "var(--app-bg-2)" }}>
 
             <p className="text-[11px] font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>Visão geral</p>
-            <div className="grid grid-cols-2 gap-2 mb-5">
+            <div className="grid grid-cols-2 gap-3 mb-6">
               {[
                 { label: "Ativas", value: active.length, color: "var(--gold)" },
                 { label: "Concluídas", value: completed.length, color: "var(--success)" },
                 { label: "Média geral", value: `${avg}%`, color: "var(--text-primary)" },
-                { label: "Marcos", value: goals.reduce((s, g) => s + g.milestones.filter(m => m.completed).length, 0), color: "var(--text-primary)" },
+                { label: "Marcos feitos", value: goals.reduce((s, g) => s + g.milestones.filter(m => m.completed).length, 0), color: "var(--text-primary)" },
               ].map(m => (
-                <div key={m.label} className="p-3 rounded-xl border"
+                <div key={m.label} className="p-4 rounded-xl border"
                   style={{ background: "var(--app-bg-3)", borderColor: "var(--app-border)" }}>
-                  <p className="text-[10px] mb-1" style={{ color: "var(--text-muted)" }}>{m.label}</p>
-                  <p className="text-[20px] font-black" style={{ color: m.color, lineHeight: 1 }}>{m.value}</p>
+                  <p className="text-[11px] mb-1.5" style={{ color: "var(--text-muted)" }}>{m.label}</p>
+                  <p className="text-[26px] font-black" style={{ color: m.color, lineHeight: 1 }}>{m.value}</p>
                 </div>
               ))}
             </div>

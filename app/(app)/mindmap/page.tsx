@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useAuthUser } from "@/hooks/useAuthUser";
 import { useUserPlan } from "@/lib/useUserPlan";
 import { useRouter } from "next/navigation";
+import { useTheme } from "@/contexts/ThemeContext";
 import ConfirmModal from "@/components/ConfirmModal";
 import {
   Mindmap, MindmapNode, MindmapConnection,
@@ -52,8 +53,12 @@ function NodeEl({ node, selected, canvasDark, onPointerDown, onConnectStart, onU
 }) {
   const bgColor = canvasDark
     ? NODE_COLORS.find(c => c.color === node.color)?.bg ?? "#111"
-    : NODE_COLORS.find(c => c.color === node.color)?.bgLight ?? "#fff";
-  const borderColor = selected ? node.color : canvasDark ? `${node.color}55` : `${node.color}88`;
+    : NODE_COLORS.find(c => c.color === node.color)?.bgLight ?? "#f5f5f0";
+  const borderColor = selected
+    ? node.color
+    : canvasDark
+      ? `${node.color}90`
+      : node.color;
 
   const ColorBar = () => (
     <div className="absolute flex items-center gap-1 px-1.5 py-1 rounded-lg border"
@@ -166,7 +171,8 @@ export default function MindmapPage() {
   const [activeMapId, setActiveMapId] = useState<string | null>(null);
   const [nodes, setNodes] = useState<CanvasNode[]>([]);
   const [connections, setConnections] = useState<MindmapConnection[]>([]);
-  const [canvasDark, setCanvasDark] = useState(true);
+  const { theme } = useTheme();
+  const [canvasDark, setCanvasDark] = useState(theme !== "light");
   const [tool, setTool] = useState<Tool>("select");
   const [selected, setSelected] = useState<string | null>(null);
   const [connecting, setConnecting] = useState<string | null>(null);
@@ -195,6 +201,10 @@ export default function MindmapPage() {
   selectedRef.current = selected;
   const historyRef = useRef(history);
   historyRef.current = history;
+
+  useEffect(() => {
+    setCanvasDark(theme !== "light");
+  }, [theme]);
 
   useEffect(() => {
     if (!user) return;
@@ -291,7 +301,10 @@ export default function MindmapPage() {
   }
 
   function moveNode(id: string, dx: number, dy: number) {
-    const updated = nodesRef.current.map(n => n.id === id ? { ...n, x: n.x + dx / zoom, y: n.y + dy / zoom } : n);
+    const maxDelta = 20;
+    const safeDx = Math.max(-maxDelta, Math.min(maxDelta, dx / zoom));
+    const safeDy = Math.max(-maxDelta, Math.min(maxDelta, dy / zoom));
+    const updated = nodesRef.current.map(n => n.id === id ? { ...n, x: n.x + safeDx, y: n.y + safeDy } : n);
     setNodes(updated); save(updated, connectionsRef.current);
   }
 
@@ -353,8 +366,14 @@ export default function MindmapPage() {
   function handleNodePointerDown(id: string, e: React.PointerEvent) {
     if (tool === "connect") { connecting ? connectNodes(id) : setConnecting(id); return; }
     setSelected(id);
-    const startX = e.clientX; const startY = e.clientY;
-    const handleMove = (me: PointerEvent) => moveNode(id, me.clientX - startX, me.clientY - startY);
+    let lastX = e.clientX; let lastY = e.clientY;
+    const handleMove = (me: PointerEvent) => {
+      const dx = me.clientX - lastX;
+      const dy = me.clientY - lastY;
+      lastX = me.clientX;
+      lastY = me.clientY;
+      moveNode(id, dx, dy);
+    };
     const handleUp = () => { document.removeEventListener("pointermove", handleMove); document.removeEventListener("pointerup", handleUp); };
     document.addEventListener("pointermove", handleMove);
     document.addEventListener("pointerup", handleUp);
@@ -411,6 +430,11 @@ export default function MindmapPage() {
 
   async function handleNewMap() {
     if (!user || !newMapName.trim()) return;
+    if (!canCreateMap) {
+      alert(`Limite de ${mapLimit} mapas no plano gratuito.`);
+      setEditingName(false);
+      return;
+    }
     await createMindmap(user.uid, newMapName.trim());
     setNewMapName(""); setEditingName(false);
   }
@@ -427,26 +451,8 @@ export default function MindmapPage() {
   }
 
   const activeMap = maps.find(m => m.id === activeMapId);
-
-  if (!isPremium) return (
-    <div className="flex flex-col items-center justify-center h-full gap-5" style={{ background: "var(--app-bg)" }}>
-      <div className="w-20 h-20 rounded-3xl flex items-center justify-center border" style={{ background: "var(--app-bg-3)", borderColor: "var(--app-border)" }}>
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="5" fill="currentColor" opacity="0.4" style={{ color: "var(--gold)" }}/>
-          <circle cx="8" cy="12" r="3.5" fill="currentColor" opacity="0.3" style={{ color: "var(--gold)" }}/>
-          <circle cx="32" cy="12" r="3.5" fill="currentColor" opacity="0.3" style={{ color: "var(--gold)" }}/>
-          <circle cx="8" cy="28" r="3.5" fill="currentColor" opacity="0.3" style={{ color: "var(--gold)" }}/>
-          <circle cx="32" cy="28" r="3.5" fill="currentColor" opacity="0.3" style={{ color: "var(--gold)" }}/>
-          <path d="M15 17.5L11 14M25 17.5l4-3.5M15 22.5L11 26M25 22.5l4 3.5" stroke="var(--gold)" strokeWidth="1.5" opacity="0.4"/>
-        </svg>
-      </div>
-      <h2 className="text-[22px] font-bold" style={{ color: "var(--text-primary)" }}>Mapa Mental</h2>
-      <p className="text-[14px] text-center max-w-sm" style={{ color: "var(--text-tertiary)" }}>Canvas infinito. Conecte notas, cards, imagens e pensamentos livremente.</p>
-      <button onClick={() => router.push("/planos-app")} className="px-8 py-3 rounded-xl text-[15px] font-bold transition-all hover:scale-[1.02]" style={{ background: "var(--gold)", color: "#000" }}>
-        Fazer upgrade para acessar
-      </button>
-    </div>
-  );
+  const mapLimit = isPremium ? Infinity : 3;
+  const canCreateMap = maps.length < mapLimit;
 
   if (loading) return (
     <div className="flex items-center justify-center h-full" style={{ background: "var(--app-bg)" }}>
@@ -473,7 +479,7 @@ export default function MindmapPage() {
 
       {/* TOPBAR */}
       <div className="flex items-center gap-3 px-4 py-3 border-b flex-shrink-0"
-        style={{ background: "var(--app-bg-2)", borderColor: "var(--app-border)" }}>
+        style={{ background: "var(--app-bg-2)", borderColor: "var(--app-border)", userSelect: "none" }}>
 
         <div className="flex items-center gap-2 overflow-x-auto flex-1 min-w-0">
           {maps.map(map => (
@@ -581,7 +587,7 @@ export default function MindmapPage() {
           style={{ background: canvasDark ? "#0A0A0A" : "#fafaf8", cursor: tool === "select" ? "grab" : "crosshair" }}
           onClick={handleCanvasClick}
           onDoubleClick={handleCanvasDoubleClick}
-          onPointerDown={handleCanvasPointerDown}
+          onPointerDown={e => { if (!(e.target as HTMLElement).closest("[data-node]")) e.currentTarget.setPointerCapture(e.pointerId); handleCanvasPointerDown(e); }}
           onPointerMove={handleCanvasPointerMove}
           onPointerUp={handleCanvasPointerUp}
           onWheel={handleWheel}
@@ -589,7 +595,7 @@ export default function MindmapPage() {
           onDragOver={e => e.preventDefault()}
         >
           <div className="absolute inset-0 pointer-events-none"
-            style={{ backgroundImage: `radial-gradient(circle, ${canvasDark ? "#1e1e1e" : "#d0d0cc"} 1px, transparent 1px)`, backgroundSize: `${28 * zoom}px ${28 * zoom}px`, backgroundPosition: `${pan.x % (28 * zoom)}px ${pan.y % (28 * zoom)}px` }} />
+            style={{ backgroundImage: `radial-gradient(circle, ${canvasDark ? "#1e1e1e" : "#c8c8c4"} 1px, transparent 1px)`, backgroundSize: `${28 * zoom}px ${28 * zoom}px`, backgroundPosition: `${pan.x % (28 * zoom)}px ${pan.y % (28 * zoom)}px` }} />
 
           {nodes.length === 0 && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 pointer-events-none">
@@ -603,7 +609,7 @@ export default function MindmapPage() {
             <svg className="absolute overflow-visible pointer-events-none" style={{ left: 0, top: 0, width: 1, height: 1 }}>
               <defs>
                 <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-                  <path d="M0,0 L0,6 L8,3 z" fill={canvasDark ? "#333" : "#aaa"}/>
+                  <path d="M0,0 L0,6 L8,3 z" fill={canvasDark ? "#333" : "#888"}/>
                 </marker>
               </defs>
               {connections.map(conn => {
@@ -612,7 +618,7 @@ export default function MindmapPage() {
                 if (!from || !to) return null;
                 const x1 = from.x + (from.width ?? 140); const y1 = from.y + 20;
                 const x2 = to.x; const y2 = to.y + 20;
-                return <path key={conn.id} d={`M ${x1} ${y1} C ${x1+60} ${y1} ${x2-60} ${y2} ${x2} ${y2}`} stroke={canvasDark ? "#2a2a2a" : "#bbb"} strokeWidth="1.5" fill="none" markerEnd="url(#arr)"/>;
+                return <path key={conn.id} d={`M ${x1} ${y1} C ${x1+60} ${y1} ${x2-60} ${y2} ${x2} ${y2}`} stroke={canvasDark ? "#2a2a2a" : "#999"} strokeWidth="1.5" fill="none" markerEnd="url(#arr)"/>;
               })}
               {connecting && (() => {
                 const from = nodes.find(n => n.id === connecting);

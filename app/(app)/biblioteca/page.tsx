@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useUserPlan } from "@/lib/useUserPlan";
+import UpgradeModal from "@/components/UpgradeModal";
 import {
   BIBLIOTECA_CONTENTS, CATEGORIES, TYPE_LABELS,
   BibliotecaContent, ContentBlock,
@@ -103,10 +103,10 @@ function ContentCard({ content, isPremium, onClick }: {
 }
 
 export default function BibliotecaPage() {
-  const router = useRouter();
   const { isPremium } = useUserPlan();
   const [activeCategory, setActiveCategory] = useState("todos");
   const [reading, setReading] = useState<BibliotecaContent | null>(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   const filtered = BIBLIOTECA_CONTENTS.filter(
     (c) => activeCategory === "todos" || c.category === activeCategory
@@ -114,7 +114,7 @@ export default function BibliotecaPage() {
 
   function handleCardClick(content: BibliotecaContent) {
     if (content.level === "premium" && !isPremium) {
-      router.push("/planos-app");
+      setShowUpgrade(true);
       return;
     }
     setReading(content);
@@ -201,12 +201,13 @@ export default function BibliotecaPage() {
             </p>
           </div>
           <button
-            onClick={() => router.push("/planos-app")}
+            onClick={() => setShowUpgrade(true)}
             className="text-[13px] font-bold px-6 py-2.5 rounded-xl transition-all hover:scale-[1.02] flex-shrink-0 ml-6"
             style={{ background: "var(--gold)", color: "#000" }}
           >
             Fazer upgrade
           </button>
+          {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} />}
         </div>
       )}
 

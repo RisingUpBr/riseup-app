@@ -3,7 +3,6 @@ import { db } from "./firebase";
 
 export async function normalizeUser(uid: string, data: any) {
   const ref = doc(db, "users", uid);
-
   const isPremium = data?.stripe?.status === "active";
 
   const limits = isPremium
@@ -21,13 +20,13 @@ export async function normalizeUser(uid: string, data: any) {
     : {
         simpleNotes: 20,
         dailyNotes: 5,
-        mindmaps: 0, // 🔒 BLOQUEADO
+        mindmaps: 3,
         manualFlashcards: 20,
         aiFlashcards: 3,
         aiRoutineGenerator: 1,
         aiGoalsGenerator: 1,
-        calendarRoutine: 0, // 🔒 BLOQUEADO
-        exclusiveLibrary: 0, // 🔒 BLOQUEADO
+        calendarRoutine: 0,
+        exclusiveLibrary: 0,
       };
 
   const usage = data?.usage ?? {
@@ -39,19 +38,13 @@ export async function normalizeUser(uid: string, data: any) {
     aiGoalsGenerator: 0,
   };
 
-  const resetAt =
-    data?.usageResetAt ??
-    new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  const resetAt = data?.usageResetAt ?? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-  await setDoc(
-    ref,
-    {
-      plan: isPremium ? "premium" : "free",
-      limits,
-      usage,
-      usageResetAt: resetAt,
-      updatedAt: serverTimestamp(),
-    },
-    { merge: true }
-  );
+  await setDoc(ref, {
+    plan: isPremium ? "premium" : "free",
+    limits,
+    usage,
+    usageResetAt: resetAt,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
 }

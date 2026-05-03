@@ -7,6 +7,7 @@ import { db } from "./firebase";
 
 export type GoalCategory = "career" | "health" | "finance" | "study" | "personal" | "social" | "custom";
 export type GoalStatus = "active" | "completed" | "paused";
+export type GoalPriority = 1 | 2 | 3;
 
 export const GOAL_CATEGORIES: { id: GoalCategory; label: string; color: string; emoji: string }[] = [
   { id: "career",   label: "Carreira",        color: "#378ADD", emoji: "💼" },
@@ -36,6 +37,7 @@ export interface Goal {
   vision?: string;
   deadline: string;
   status: GoalStatus;
+  priority: GoalPriority;
   milestones: Milestone[];
   color: string;
   createdAt: Timestamp | null;

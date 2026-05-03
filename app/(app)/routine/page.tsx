@@ -539,14 +539,35 @@ export default function RoutinePage() {
     <div className="flex flex-col h-screen" style={{ background: "var(--app-bg)" }}>
 
       {/* TOPBAR */}
-      <div className="border-b flex-shrink-0" style={{ background: "var(--app-bg-2)", borderColor: "var(--app-border)" }}>
-        <div className="max-w-2xl mx-auto px-6 py-3 flex items-center justify-between">
-          <h1 className="text-[16px] font-bold" style={{ color: "var(--text-primary)" }}>Rotina</h1>
+      <div className="flex-shrink-0 border-b" style={{ borderColor: "var(--app-border)", background: "var(--app-bg-2)" }}>
+        <div className="flex items-start justify-between gap-4 px-8 py-5">
+          {/* Lado esquerdo — título e info */}
+          <div className="flex-1 min-w-0">
+            <h1 className="text-[24px] font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>Rotina</h1>
+            <p className="text-[12px] mt-0.5" style={{ color: "var(--text-muted)" }}>
+              {selectedDate === today
+                ? `Hoje · ${dayEntries.length} bloco${dayEntries.length !== 1 ? "s" : ""}`
+                : `${formatDateShort(selectedDate)} · ${dayEntries.length} bloco${dayEntries.length !== 1 ? "s" : ""}`}
+            </p>
+            {activeTemplatesForDay.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mt-2">
+                <span className="text-[11px]" style={{ color: "var(--text-faint)" }}>Ativos:</span>
+                {activeTemplatesForDay.map(tpl => (
+                  <div key={tpl.id}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12px] font-semibold border"
+                    style={{ background: "var(--gold-bg)", borderColor: "var(--gold)", color: "var(--gold)" }}>
+                    {tpl.emoji} {tpl.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          {/* Lado direito — botão Templates */}
           <button onClick={() => setScreen("templates")}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border text-[13px] font-semibold transition-all"
-            style={{ borderColor: "var(--app-border-2)", color: "var(--text-secondary)" }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "var(--app-bg-4)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "transparent"}>
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border text-[13px] font-semibold transition-all flex-shrink-0"
+            style={{ borderColor: "var(--app-border-2)", color: "var(--text-secondary)", background: "var(--app-bg-3)" }}
+            onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = "var(--gold-bg)"; el.style.borderColor = "var(--gold)"; el.style.color = "var(--gold)"; }}
+            onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = "var(--app-bg-3)"; el.style.borderColor = "var(--app-border-2)"; el.style.color = "var(--text-secondary)"; }}>
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.1"/>
               <rect x="7" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.1"/>
@@ -572,53 +593,57 @@ export default function RoutinePage() {
       ) : (
         <div className="flex flex-1 overflow-hidden">
 
-          {/* MAIN CONTENT */}
+          {/* MAIN — ocupa todo o espaço menos a sidebar */}
           <div className="flex-1 overflow-y-auto">
 
-            {/* Mini semana */}
-            <div className="px-6 py-3 border-b" style={{ borderColor: "var(--app-border)" }}>
-              <div className="flex gap-1">
-                {weekDates.map((date) => {
-                  const dayTemplates = getTemplatesForDate(templates, date);
-                  const dayBlocks = getBlocksForDate(templates, date);
-                  const dayLog = logs.find(l => l.date === date);
-                  const dayDone = dayBlocks.length > 0 &&
-                    dayBlocks.every(e => (dayLog?.completedBlocks ?? []).includes(e.block.id));
-                  const isSelected = date === selectedDate;
-                  const isToday = date === today;
-                  return (
-                    <button key={date} onClick={() => setSelectedDate(date)}
-                      className="flex-1 flex flex-col items-center gap-1 py-2 rounded-xl transition-all border"
-                      style={{ background: isSelected ? "var(--gold-bg)" : "transparent", borderColor: isSelected ? "var(--gold)" : "transparent" }}>
-                      <span className="text-[10px] uppercase font-bold"
-                        style={{ color: isSelected ? "var(--gold)" : "var(--text-faint)" }}>
-                        {formatDateShort(date)}
-                      </span>
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-bold"
+            {/* Mini semana — ocupa TODA a largura disponível */}
+            <div className="border-b" style={{ borderColor: "var(--app-border)" }}>
+              <div className="px-8 py-3">
+                <div className="flex gap-1">
+                  {weekDates.map(date => {
+                    const dayTemplates = getTemplatesForDate(templates, date);
+                    const dayBlocks = getBlocksForDate(templates, date);
+                    const dayLog = logs.find((l: any) => l.date === date);
+                    const dayDone = dayBlocks.length > 0 && dayBlocks.every(e => (dayLog?.completedBlocks ?? []).includes(e.block.id));
+                    const isSelected = date === selectedDate;
+                    const isToday = date === today;
+                    return (
+                      <button key={date} onClick={() => setSelectedDate(date)}
+                        className="flex-1 flex flex-col items-center gap-1 py-3 rounded-xl transition-all border"
                         style={{
-                          background: isToday && isSelected ? "var(--gold)" : isToday ? "var(--gold-bg)" : "transparent",
-                          color: isToday && isSelected ? "#000" : isSelected ? "var(--gold)" : "var(--text-secondary)",
-                          border: isToday && !isSelected ? "1.5px solid var(--gold)" : "none",
+                          background: isSelected ? "var(--gold-bg)" : "transparent",
+                          borderColor: isSelected ? "var(--gold)" : "transparent",
                         }}>
-                        {new Date(date + "T12:00:00").getDate()}
-                      </div>
-                      <div className="flex gap-0.5">
-                        {dayTemplates.slice(0, 3).map(t => (
-                          <div key={t.id} className="w-1.5 h-1.5 rounded-full"
-                            style={{ background: dayDone ? "#4ade80" : "var(--gold)" }} />
-                        ))}
-                        {dayTemplates.length === 0 && (
-                          <div className="w-1.5 h-1.5 rounded-full" style={{ background: "transparent" }} />
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
+                        <span className="text-[11px] uppercase font-bold tracking-wide"
+                          style={{ color: isSelected ? "var(--gold)" : "var(--text-faint)" }}>
+                          {formatDateShort(date)}
+                        </span>
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-[15px] font-bold"
+                          style={{
+                            background: isToday && isSelected ? "var(--gold)" : isToday ? "var(--gold-bg)" : "transparent",
+                            color: isToday && isSelected ? "#000" : isSelected ? "var(--gold)" : "var(--text-primary)",
+                            border: isToday && !isSelected ? "2px solid var(--gold)" : "none",
+                          }}>
+                          {new Date(date + "T12:00:00").getDate()}
+                        </div>
+                        <div className="flex gap-0.5">
+                          {dayTemplates.slice(0, 3).map(t => (
+                            <div key={t.id} className="w-1.5 h-1.5 rounded-full"
+                              style={{ background: dayDone ? "#4ade80" : "var(--gold)" }} />
+                          ))}
+                          {dayTemplates.length === 0 && (
+                            <div className="w-1.5 h-1.5 rounded-full" style={{ background: "transparent" }} />
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
             {/* Conteúdo do dia */}
-            <div className="max-w-2xl mx-auto px-6 py-6 w-full">
+            <div className="px-8 py-6">
               <div className="flex items-center justify-between mb-5">
                 <div>
                   <h2 className="text-[20px] font-bold capitalize" style={{ color: "var(--text-primary)" }}>
@@ -632,7 +657,7 @@ export default function RoutinePage() {
                 </div>
               </div>
 
-              {/* Templates ativos no dia — controle de coexistência */}
+              {/* Templates ativos + adicionar */}
               {activeTemplatesForDay.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-5">
                   {activeTemplatesForDay.map(tpl => (
@@ -642,18 +667,14 @@ export default function RoutinePage() {
                       <span>{tpl.emoji}</span>
                       <span>{tpl.name}</span>
                       <div className="flex items-center gap-0.5 ml-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => { setEditingTemplate(tpl); setScreen("edit-template"); }}
-                          title="Editar"
+                        <button onClick={() => { setEditingTemplate(tpl); setScreen("edit-template"); }}
                           className="w-6 h-6 rounded-md flex items-center justify-center transition-all"
                           style={{ color: "var(--text-faint)" }}
                           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--app-bg-4)"; (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)"; }}
                           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-faint)"; }}>
                           <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 8.5l1-.3 5.5-5.5-.7-.7-5.5 5.5-.3 1z" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/></svg>
                         </button>
-                        <button
-                          onClick={() => setDeleteTarget(tpl.id)}
-                          title="Remover"
+                        <button onClick={() => setDeleteTarget(tpl.id)}
                           className="w-6 h-6 rounded-md flex items-center justify-center transition-all"
                           style={{ color: "var(--text-faint)" }}
                           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--danger-bg)"; (e.currentTarget as HTMLElement).style.color = "var(--danger)"; }}
@@ -663,8 +684,7 @@ export default function RoutinePage() {
                       </div>
                     </div>
                   ))}
-                  <button
-                    onClick={() => setScreen("templates")}
+                  <button onClick={() => setScreen("templates")}
                     className="flex items-center gap-1 px-3 py-1.5 rounded-xl border text-[12px] font-semibold border-dashed transition-all"
                     style={{ borderColor: "var(--app-border-2)", color: "var(--text-faint)" }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--gold)"; (e.currentTarget as HTMLElement).style.color = "var(--gold)"; }}
@@ -679,7 +699,7 @@ export default function RoutinePage() {
                 <div className="py-16 text-center">
                   <p className="text-[15px]" style={{ color: "var(--text-muted)" }}>Nenhum bloco para este dia</p>
                   <p className="text-[13px] mt-2" style={{ color: "var(--text-faint)" }}>
-                    Seus templates não têm blocos configurados para este dia da semana
+                    Seus templates não têm blocos para este dia da semana
                   </p>
                   <button onClick={() => setScreen("templates")}
                     className="mt-4 px-5 py-2.5 rounded-xl text-[13px] font-bold"
@@ -706,16 +726,19 @@ export default function RoutinePage() {
                             style={{ background: block.color, boxShadow: "0 0 0 3px var(--app-bg)" }} />
                           <div
                             title={`${templateEmoji} ${templateName}`}
-                            className="flex-1 rounded-2xl border p-4 transition-all group overflow-hidden relative"
+                            className="flex-1 p-4 transition-all group overflow-hidden relative"
                             style={{
                               background: isDone ? `${block.color}08` : "var(--app-bg-2)",
-                              borderColor: isDone ? `${block.color}40` : "var(--app-border)",
+                              borderTop: `1px solid ${isDone ? `${block.color}40` : "var(--app-border)"}`,
+                              borderRight: `1px solid ${isDone ? `${block.color}40` : "var(--app-border)"}`,
+                              borderBottom: `1px solid ${isDone ? `${block.color}40` : "var(--app-border)"}`,
+                              borderLeft: `3px solid ${block.color}`,
+                              borderRadius: "16px",
                               opacity: isDone ? 0.75 : 1,
-                              borderLeft: `3px solid ${block.color}60`,
                             }}>
                             <div className="flex items-start justify-between gap-3">
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
+                                <div className="flex items-center gap-2 mb-1.5">
                                   <span className="text-[18px]">{block.emoji}</span>
                                   <span className="text-[15px] font-bold"
                                     style={{ color: block.color, textDecoration: isDone ? "line-through" : "none" }}>
@@ -723,17 +746,24 @@ export default function RoutinePage() {
                                   </span>
                                   {block.flexible && (
                                     <span className="text-[9px] px-1.5 py-0.5 rounded-full font-semibold"
-                                      style={{ background: "var(--app-bg-4)", color: "var(--text-faint)" }}>flexível</span>
+                                      style={{ background: "var(--app-bg-4)", color: "var(--text-faint)" }}>
+                                      flexível
+                                    </span>
                                   )}
                                 </div>
-                                {/* Linha 3: só categoria — template vai na borda */}
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 mb-1">
                                   <span className="text-[12px]" style={{ color: "var(--text-muted)" }}>
                                     {block.startTime} – {block.endTime} · {formatDuration(duration)}
                                   </span>
+                                </div>
+                                <div className="flex items-center gap-2">
                                   <span className="text-[11px] px-2 py-0.5 rounded-full"
                                     style={{ background: `${cat.color}15`, color: cat.color }}>
                                     {cat.emoji} {cat.label}
+                                  </span>
+                                  <span className="text-[10px] px-2 py-0.5 rounded-full"
+                                    style={{ background: "var(--app-bg-4)", color: "var(--text-faint)" }}>
+                                    {templateEmoji} {templateName}
                                   </span>
                                 </div>
                                 {block.notes && (
@@ -741,8 +771,16 @@ export default function RoutinePage() {
                                 )}
                               </div>
                               <button onClick={() => toggleBlock(block.id)}
-                                className="w-8 h-8 rounded-xl flex items-center justify-center border-2 transition-all flex-shrink-0 mt-0.5"
-                                style={{ borderColor: isDone ? "#4ade80" : `${block.color}50`, background: isDone ? "rgba(74,222,128,0.15)" : "transparent", color: "#4ade80" }}>
+                                className="w-8 h-8 rounded-xl flex items-center justify-center transition-all flex-shrink-0 mt-0.5"
+                                style={{
+                                  borderTop: `2px solid ${isDone ? "#4ade80" : `${block.color}50`}`,
+                                  borderRight: `2px solid ${isDone ? "#4ade80" : `${block.color}50`}`,
+                                  borderBottom: `2px solid ${isDone ? "#4ade80" : `${block.color}50`}`,
+                                  borderLeft: `2px solid ${isDone ? "#4ade80" : `${block.color}50`}`,
+                                  borderRadius: "12px",
+                                  background: isDone ? "rgba(74,222,128,0.15)" : "transparent",
+                                  color: "#4ade80",
+                                }}>
                                 {isDone && (
                                   <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                                     <path d="M2.5 6.5l3 3 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
@@ -761,9 +799,8 @@ export default function RoutinePage() {
           </div>
 
           {/* SIDEBAR */}
-          <div className="w-60 border-l flex-shrink-0 overflow-y-auto px-4 py-5"
+          <div className="w-56 border-l flex-shrink-0 overflow-y-auto px-5 py-6"
             style={{ borderColor: "var(--app-border)", background: "var(--app-bg-2)" }}>
-
             <p className="text-[11px] font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>
               {selectedDate === today ? "Hoje" : formatDateShort(selectedDate)}
             </p>
@@ -776,7 +813,7 @@ export default function RoutinePage() {
             </div>
 
             <p className="text-[11px] font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>Por categoria</p>
-            <div className="space-y-3 mb-6">
+            <div className="space-y-3 mb-5">
               {CATEGORIES.map(cat => {
                 const catEntries = dayEntries.filter(e => e.block.category === cat.id);
                 if (catEntries.length === 0) return null;
@@ -789,7 +826,7 @@ export default function RoutinePage() {
                         <span className="text-[12px]">{cat.emoji}</span>
                         <span className="text-[12px] font-medium" style={{ color: "var(--text-secondary)" }}>{cat.label}</span>
                       </div>
-                      <span className="text-[11px]" style={{ color: "var(--text-muted)" }}>{catDone}/{catEntries.length}</span>
+                      <span className="text-[11px]" style={{ color: "var(--text-muted)" }}>{pct}%</span>
                     </div>
                     <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "var(--app-border)" }}>
                       <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: cat.color }} />
@@ -799,33 +836,29 @@ export default function RoutinePage() {
               })}
             </div>
 
-            <p className="text-[11px] font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>Semana</p>
-            <div className="space-y-1.5">
-              {weekDates.map(date => {
-                const dayBlocks = getBlocksForDate(templates, date);
-                const dayLog = logs.find(l => l.date === date);
-                const dayDone = dayBlocks.filter(e => (dayLog?.completedBlocks ?? []).includes(e.block.id)).length;
-                const dayPct = dayBlocks.length > 0 ? Math.round((dayDone / dayBlocks.length) * 100) : 0;
-                const isToday = date === today;
-                const isSelected = date === selectedDate;
+            <p className="text-[11px] font-bold uppercase tracking-widest mb-3" style={{ color: "var(--text-muted)" }}>Templates</p>
+            <div className="space-y-1.5 mb-4">
+              {templates.map(tpl => {
+                const isActive = getTemplatesForDate([tpl], selectedDate).length > 0;
                 return (
-                  <button key={date} onClick={() => setSelectedDate(date)}
-                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg transition-all"
-                    style={{ background: isSelected ? "var(--app-bg-3)" : "transparent" }}>
-                    <span className="text-[11px] font-bold w-8 text-left capitalize"
-                      style={{ color: isToday ? "var(--gold)" : "var(--text-muted)" }}>
-                      {formatDateShort(date)}
-                    </span>
-                    <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "var(--app-border)" }}>
-                      <div className="h-full rounded-full" style={{ width: `${dayPct}%`, background: dayPct === 100 ? "#4ade80" : "var(--gold)" }} />
-                    </div>
-                    <span className="text-[10px] w-7 text-right" style={{ color: "var(--text-faint)" }}>
-                      {dayPct}%
-                    </span>
-                  </button>
+                  <div key={tpl.id}
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl text-[12px] font-medium border transition-all cursor-pointer"
+                    style={{ background: isActive ? "var(--gold-bg)" : "transparent", borderColor: isActive ? "var(--gold)" : "transparent", color: isActive ? "var(--gold)" : "var(--text-secondary)" }}
+                    onClick={() => { setEditingTemplate(tpl); setScreen("edit-template"); }}>
+                    <span>{tpl.emoji}</span>
+                    <span className="flex-1 truncate">{tpl.name}</span>
+                    {isActive && <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "var(--gold)" }} />}
+                  </div>
                 );
               })}
             </div>
+            <button onClick={() => setScreen("templates")}
+              className="w-full py-2 rounded-xl text-[12px] font-bold border transition-all"
+              style={{ borderColor: "var(--app-border-2)", color: "var(--text-muted)" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--gold)"; (e.currentTarget as HTMLElement).style.color = "var(--gold)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--app-border-2)"; (e.currentTarget as HTMLElement).style.color = "var(--text-muted)"; }}>
+              Gerenciar templates
+            </button>
           </div>
         </div>
       )}

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuthUser } from "@/hooks/useAuthUser";
 import { useTheme } from "@/contexts/ThemeContext";
 import Sidebar from "@/components/Sidebar";
+import { updateStreak } from "@/lib/streakService";
 
 function AppShell({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
@@ -31,6 +32,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       router.push("/onboarding");
     }
   }, [user, userData, loading, router]);
+
+  useEffect(() => {
+    if (user?.uid) {
+      updateStreak(user.uid).catch(console.error);
+    }
+  }, [user?.uid]);
 
   if (loading) {
     return (

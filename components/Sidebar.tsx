@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { extractNameFromEmail } from "@/lib/extractName";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,55 +8,55 @@ import { auth } from "@/lib/firebase";
 import { useAuthUser } from "@/hooks/useAuthUser";
 import { useUserPlan } from "@/lib/useUserPlan";
 import { useTheme } from "@/contexts/ThemeContext";
-
+import { getStreak, StreakData, DEFAULT_STREAK } from "@/lib/streakService";
+import UpgradeModal from "@/components/UpgradeModal";
 
 const Icons = {
-  dashboard: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1.2" fill="currentColor"/><rect x="8" y="1" width="5" height="5" rx="1.2" fill="currentColor"/><rect x="1" y="8" width="5" height="5" rx="1.2" fill="currentColor"/><rect x="8" y="8" width="5" height="5" rx="1.2" fill="currentColor"/></svg>),
-  library: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h2v10H2zM6 2h2v10H6zM10 2l2 .5v9l-2-.5V2z" fill="currentColor"/></svg>),
-  notes: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="1.5" width="10" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/></svg>),
-  diary: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 2h6.5L11 3.5V12H3V2z" stroke="currentColor" strokeWidth="1.2"/><path d="M9 2v2h2" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/><path d="M5 6h4M5 8.5h3" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/></svg>),
-  flashcards: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3" width="9" height="6" rx="1.2" stroke="currentColor" strokeWidth="1.2"/><rect x="3.5" y="5" width="9" height="6" rx="1.2" stroke="currentColor" strokeWidth="1.2" opacity="0.4"/></svg>),
-  mindmap: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="1.8" fill="currentColor"/><circle cx="2.5" cy="4" r="1.2" fill="currentColor" opacity="0.6"/><circle cx="11.5" cy="4" r="1.2" fill="currentColor" opacity="0.6"/><circle cx="2.5" cy="10" r="1.2" fill="currentColor" opacity="0.6"/><circle cx="11.5" cy="10" r="1.2" fill="currentColor" opacity="0.6"/><path d="M5.3 6.1L3.6 4.9M8.7 6.1l1.7-1.2M5.3 7.9L3.6 9.1M8.7 7.9l1.7 1.2" stroke="currentColor" strokeWidth="0.9" opacity="0.5"/></svg>),
-  routine: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.2"/><path d="M7 4v3l2 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>),
-  goals: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.2"/><circle cx="7" cy="7" r="2.5" stroke="currentColor" strokeWidth="1" opacity="0.6"/><circle cx="7" cy="7" r="1" fill="currentColor"/></svg>),
-  premium: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5l1.5 3.5 3.5.5-2.5 2.5.7 3.5L7 9.5l-3.2 2 .7-3.5L2 5.5l3.5-.5L7 1.5z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"/></svg>),
-  lock: (<svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="2" y="4.5" width="7" height="5.5" rx="1" stroke="currentColor" strokeWidth="1"/><path d="M3.5 4.5V3a2 2 0 014 0v1.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/></svg>),
-  logout: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2H2.5A1 1 0 001.5 3v8a1 1 0 001 1H5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/><path d="M9.5 9.5L12.5 7l-3-2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12.5 7H5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>),
-  home: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1.5 6.5L7 2l5.5 4.5V12H9V9H5v3H1.5V6.5z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"/></svg>),
-  settings: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="2" stroke="currentColor" strokeWidth="1.1"/><path d="M7 1.5v1M7 11.5v1M1.5 7h1M11.5 7h1M3.2 3.2l.7.7M10.1 10.1l.7.7M10.1 3.2l-.7.7M3.2 10.8l.7-.7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/></svg>),
-  upgrade: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2l1.5 3 3 .5-2.2 2.2.6 3.3L7 9.5l-2.9 1.5.6-3.3L2.5 5.5l3-.5L7 2z" fill="currentColor"/></svg>),
-  sun: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="2.5" stroke="currentColor" strokeWidth="1.2"/><path d="M7 1.5v1M7 11.5v1M1.5 7h1M11.5 7h1M3.4 3.4l.7.7M9.9 9.9l.7.7M9.9 3.4l-.7.7M3.4 9.9l.7-.7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/></svg>),
-  moon: (<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M11.5 8A5 5 0 016 2.5a5 5 0 100 9 5 5 0 005.5-3.5z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>),
+  dashboard:   <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><rect x="1" y="1" width="5.5" height="5.5" rx="1.2" fill="currentColor" opacity="0.9"/><rect x="8.5" y="1" width="5.5" height="5.5" rx="1.2" fill="currentColor" opacity="0.9"/><rect x="1" y="8.5" width="5.5" height="5.5" rx="1.2" fill="currentColor" opacity="0.9"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.2" fill="currentColor" opacity="0.9"/></svg>,
+  library:     <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><path d="M2 2.5h2.5v10H2zM6.5 2.5H9v10H6.5zM11 2.5l2.5.6v8.8l-2.5-.6V2.5z" fill="currentColor" opacity="0.8"/></svg>,
+  notes:       <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><rect x="2" y="1.5" width="11" height="12" rx="1.8" stroke="currentColor" strokeWidth="1.2"/><path d="M5 5.5h5M5 8h5M5 10.5h3" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/></svg>,
+  diary:       <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><path d="M7.5 13V3.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/><path d="M7.5 3.5C6 2 3 2 1.5 3v9c1.5-1 4.5-1 6 0" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/><path d="M7.5 3.5C9 2 12 2 13.5 3v9c-1.5-1-4.5-1-6 0" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+  flashcards:  <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><rect x="1.5" y="3.5" width="9.5" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2"/><rect x="4" y="5.5" width="9.5" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2" opacity="0.4"/></svg>,
+  mindmap:     <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="2" fill="currentColor"/><circle cx="2.5" cy="4" r="1.3" fill="currentColor" opacity="0.5"/><circle cx="12.5" cy="4" r="1.3" fill="currentColor" opacity="0.5"/><circle cx="2.5" cy="11" r="1.3" fill="currentColor" opacity="0.5"/><circle cx="12.5" cy="11" r="1.3" fill="currentColor" opacity="0.5"/><path d="M5.7 6.3L3.7 4.8M9.3 6.3l2-1.5M5.7 8.7L3.7 10.2M9.3 8.7l2 1.5" stroke="currentColor" strokeWidth="1" opacity="0.5" strokeLinecap="round"/></svg>,
+  routine:     <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" strokeWidth="1.2"/><path d="M7.5 4.5v3l2 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>,
+  goals:       <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" strokeWidth="1.2"/><circle cx="7.5" cy="7.5" r="2.8" stroke="currentColor" strokeWidth="1" opacity="0.5"/><circle cx="7.5" cy="7.5" r="1" fill="currentColor"/></svg>,
+  brain:       <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><path d="M7.5 13C7.5 13 3 11 3 7c0-2.2 1.6-4 3.5-4 .7 0 1.3.2 1.8.6" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/><path d="M7.5 13C7.5 13 12 11 12 7c0-2.2-1.6-4-3.5-4-.7 0-1.3.2-1.8.6" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/><path d="M7.5 3.6V13" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" opacity="0.4"/><path d="M4.5 6c-.8.3-1.5 1-1.5 2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/><path d="M10.5 6c.8.3 1.5 1 1.5 2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/><path d="M5 9.5c.5.8 1.4 1.5 2.5 1.5s2-.7 2.5-1.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6"/><path d="M5.5 5.5C5 6 4.8 6.7 5 7.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.5"/><path d="M9.5 5.5C10 6 10.2 6.7 10 7.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.5"/></svg>,
+  settings:    <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><path d="M6.2 1.5l-.4 1.3a5 5 0 00-1.1.6L3.4 3l-1.2 2 1 .9a5 5 0 000 1.2l-1 .9 1.2 2 1.3-.4a5 5 0 001.1.6l.4 1.3h2.4l.4-1.3a5 5 0 001.1-.6l1.3.4 1.2-2-1-.9a5 5 0 000-1.2l1-.9-1.2-2-1.3.4a5 5 0 00-1.1-.6L8.6 1.5H6.2z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round"/><circle cx="7.5" cy="7.5" r="1.6" stroke="currentColor" strokeWidth="1.1"/></svg>,
+  sun:         <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="2.8" stroke="currentColor" strokeWidth="1.2"/><path d="M7.5 1.5v1.2M7.5 12.3v1.2M1.5 7.5h1.2M12.3 7.5h1.2M3.4 3.4l.85.85M10.75 10.75l.85.85M10.75 3.4l-.85.85M3.4 10.75l.85-.85" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/></svg>,
+  moon:        <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><path d="M12.5 9.5A6 6 0 016.5 2.5a6 6 0 100 10 6 6 0 006-3z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>,
+  logout:      <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><path d="M5.5 2.5H3A1 1 0 002 3.5v8a1 1 0 001 1h2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/><path d="M10 10l3-2.5L10 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/><path d="M13 7.5H6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/></svg>,
+  upgrade:     <svg width="16" height="16" viewBox="0 0 15 15" fill="none"><path d="M7.5 2l1.8 3.5 3.7.6-2.7 2.6.7 3.8-3.5-1.8-3.5 1.8.7-3.8L2 6.1l3.7-.6L7.5 2z" fill="currentColor"/></svg>,
+  chevron:     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>,
 };
 
 const MENU = [
   {
-    section: "Início",
+    section: "INÍCIO",
     items: [
-      { name: "Meu espaço", href: "/dashboard", icon: "dashboard" },
-      { name: "Biblioteca", href: "/biblioteca", icon: "library", premium: true },
+      { name: "Meu Espaço",  href: "/dashboard",     icon: "dashboard" },
+      { name: "Biblioteca",  href: "/biblioteca",    icon: "library"   },
     ],
   },
   {
-    section: "Produtividade",
+    section: "PRODUTIVIDADE",
     items: [
-      { name: "Notas", href: "/notes/simple", icon: "notes" },
-      { name: "Diário", href: "/diario", icon: "diary" },
-      { name: "Flashcards", href: "/flashcards/ai", icon: "flashcards" },
-      { name: "Mapa Mental", href: "/mindmap", icon: "mindmap", premium: true },
+      { name: "Notas",       href: "/notes/simple",  icon: "notes"      },
+      { name: "Diário",      href: "/diario",        icon: "diary"      },
+      { name: "Flashcards",  href: "/flashcards/ai", icon: "flashcards" },
+      { name: "Mapa Mental", href: "/mindmap",       icon: "mindmap"    },
     ],
   },
   {
-    section: "Planejamento",
+    section: "PLANEJAMENTO",
     items: [
-      { name: "Rotina", href: "/routine", icon: "routine" },
-      { name: "Metas", href: "/goals", icon: "goals" },
+      { name: "Rotina",      href: "/routine",       icon: "routine"    },
+      { name: "Metas",       href: "/goals",         icon: "goals"      },
     ],
   },
   {
-    section: "Premium",
+    section: "CONHECIMENTO",
     items: [
-      { name: "Conteúdo Premium", href: "/premium", icon: "premium", premium: true },
+      { name: "Segundo Cérebro", href: "/premium",   icon: "brain"      },
     ],
   },
 ];
@@ -66,199 +66,120 @@ export default function Sidebar() {
   const router = useRouter();
   const { user, userData } = useAuthUser();
   const { isPremium } = useUserPlan();
-  const { theme, toggleTheme } = useTheme();
-  const [showUserMenu, setShowUserMenu] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  const specificPlan = userData?.stripe?.plan;
-  const displayName = userData?.name || (user?.email ? extractNameFromEmail(user.email) : "Você");
-
-  function getPlanLabel() {
-    if (isPremium) {
-      const labels: Record<string, string> = { quinzenal: "Quinzenal", mensal: "Mensal", anual: "Anual" };
-      return labels[specificPlan ?? ""] ?? "Premium";
-    }
-    return "Free";
-  }
+  const { preference, setTheme } = useTheme();
+  const [streak, setStreak] = useState<StreakData>(DEFAULT_STREAK);
+  const [showUpgrade, setShowUpgrade] = useState(false);
+  useEffect(() => {
+    if (!user) return;
+    getStreak(user.uid).then(setStreak);
+  }, [user]);
 
   async function handleLogout() {
-    setShowUserMenu(false);
     await signOut(auth);
-    router.push("/");
+    router.push("/auth");
   }
 
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setShowUserMenu(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const isDark = theme === "dark";
-
-  const s = {
-    aside: { background: "var(--app-bg-2)", borderColor: "var(--app-border)" },
-    section: { color: "var(--text-tertiary)" },
-    itemDefault: { color: "var(--text-primary)" },
-    itemActive: { background: "var(--app-bg-4)", color: "var(--gold)" },
-    itemLocked: { color: "var(--text-secondary)" },
-    userBtn: { color: "var(--text-primary)" },
-    dropdown: { background: "var(--app-bg-3)", borderColor: "var(--app-border-2)" },
-    dropItem: { color: "var(--text-secondary)" },
-  };
+  const displayName = userData?.name || user?.displayName || extractNameFromEmail(user?.email ?? "");
+  const firstName = displayName.split(" ")[0];
+  const initial = firstName[0]?.toUpperCase() ?? "?";
 
   return (
-    <aside
-      className="w-64 h-screen flex flex-col fixed left-0 top-0 overflow-y-auto border-r"
-      style={s.aside}
-    >
-      {/* LOGO + USUÁRIO */}
-      <div className="px-4 pt-5 pb-3 border-b" style={{ borderColor: "var(--app-border)" }}>
-        <Link href="/" className="flex items-center mb-4 px-1">
-          <span className="font-semibold tracking-[0.15em] text-sm uppercase" style={{ color: "var(--gold)" }}>
+    <aside className="fixed left-0 top-0 h-screen w-64 flex flex-col z-40 border-r"
+      style={{ background: "var(--app-bg-2)", borderColor: "var(--app-border)" }}>
+
+      {/* ── LOGO ── */}
+      <div className="flex items-center gap-3 px-5 py-4 border-b"
+        style={{ borderColor: "var(--app-border)" }}>
+        <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 relative overflow-hidden"
+          style={{ background: "var(--gold)" }}>
+          <span className="text-[15px] font-black" style={{ color: "#000", letterSpacing: "-0.5px" }}>R</span>
+          <div className="absolute inset-0 rounded-xl"
+            style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%)" }}/>
+        </div>
+        <div>
+          <span className="text-[16px] font-black tracking-tight" style={{ color: "var(--text-primary)", letterSpacing: "-0.3px" }}>
             Rise Up
           </span>
-        </Link>
+          <div className="text-[9px] font-semibold uppercase tracking-widest -mt-0.5"
+            style={{ color: "var(--text-faint)" }}>
+            seu espaço para crescer
+          </div>
+        </div>
+      </div>
 
-        <div className="relative" ref={menuRef}>
-          <button
-            onClick={() => setShowUserMenu(!showUserMenu)}
-            className="w-full flex items-center justify-between px-2 py-2 rounded-lg transition-colors"
-            style={{ color: "var(--text-primary)" }}
-            onMouseEnter={e => (e.currentTarget.style.background = "var(--app-bg-4)")}
-            onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
-          >
-            <div className="flex items-center gap-2.5">
-              <div
-                className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-semibold flex-shrink-0"
-                style={{ background: "var(--gold-bg)", border: "1px solid var(--gold)", color: "var(--gold)" }}
-              >
-                {displayName.charAt(0).toUpperCase()}
-              </div>
-              <span className="text-[13px] font-medium truncate max-w-[120px]">
-                Espaço de {displayName}
-              </span>
-            </div>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-              className={`transition-transform flex-shrink-0 ${showUserMenu ? "rotate-180" : ""}`}
-              style={{ color: "var(--text-muted)" }}>
-              <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-
-          {showUserMenu && (
-            <div
-              className="absolute left-0 right-0 top-full mt-1.5 rounded-xl overflow-hidden shadow-2xl z-50 border"
-              style={s.dropdown}
-            >
-              <div className="px-3.5 py-3 border-b" style={{ borderColor: "var(--app-border)" }}>
-                <p className="text-xs truncate" style={{ color: "var(--text-muted)" }}>{user?.email}</p>
-                <div className="flex items-center justify-between mt-1.5">
-                  <span className="text-xs" style={{ color: "var(--text-tertiary)" }}>Plano atual</span>
-                  <span
-                    className="text-[10px] px-2 py-0.5 rounded-full font-medium"
-                    style={{
-                      background: isPremium ? "var(--gold-bg)" : "var(--app-bg-4)",
-                      color: isPremium ? "var(--gold)" : "var(--text-muted)",
-                    }}
-                  >
-                    {getPlanLabel()}
-                  </span>
-                </div>
-              </div>
-
-              {!isPremium && (
-                <div className="px-2.5 py-2 border-b" style={{ borderColor: "var(--app-border)" }}>
-                  <Link
-                    href="/upgrade"
-                    onClick={() => setShowUserMenu(false)}
-                    className="flex items-center gap-2 w-full px-2.5 py-2 rounded-lg transition-colors"
-                    style={{ background: "var(--gold-bg)" }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "var(--gold-bg-strong)")}
-                    onMouseLeave={e => (e.currentTarget.style.background = "var(--gold-bg)")}
-                  >
-                    <span style={{ color: "var(--gold)" }}>{Icons.upgrade}</span>
-                    <span className="text-xs font-semibold" style={{ color: "var(--gold)" }}>Fazer upgrade</span>
-                  </Link>
-                </div>
+      {/* ── PERFIL DO USUÁRIO ── */}
+      <div className="px-3 pt-3 pb-2">
+        <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border"
+          style={{ background: "var(--app-bg-3)", borderColor: "var(--app-border)" }}>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-[13px] font-bold flex-shrink-0"
+            style={{ background: "var(--gold-bg)", color: "var(--gold)", border: "1px solid var(--gold)" }}>
+            {initial}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5">
+              <p className="text-[13px] font-semibold truncate" style={{ color: "var(--text-primary)" }}>
+                {firstName}
+              </p>
+              {isPremium && (
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                  style={{ background: "var(--gold-bg)", color: "var(--gold)" }}>
+                  PRO
+                </span>
               )}
-
-              <div className="px-2.5 py-2 space-y-0.5">
-                <button
-                  onClick={() => { router.push("/configuracoes"); setShowUserMenu(false); }}
-                  className="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg transition-colors"
-                  style={{ color: "var(--text-tertiary)" }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--app-bg-4)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-tertiary)"; }}
-                >
-                  <span>{Icons.settings}</span>
-                  <span className="text-xs">Configurações</span>
-                </button>
-                <button
-                  onClick={() => { router.push("/"); setShowUserMenu(false); }}
-                  className="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg transition-colors"
-                  style={{ color: "var(--text-tertiary)" }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--app-bg-4)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-tertiary)"; }}
-                >
-                  <span>{Icons.home}</span>
-                  <span className="text-xs">Voltar ao site</span>
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg transition-colors"
-                  style={{ color: "var(--text-tertiary)" }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--danger-bg)"; (e.currentTarget as HTMLElement).style.color = "var(--danger)"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-tertiary)"; }}
-                >
-                  <span>{Icons.logout}</span>
-                  <span className="text-xs">Sair</span>
-                </button>
-              </div>
+            </div>
+            <p className="text-[11px] truncate" style={{ color: "var(--text-faint)" }}>
+              {user?.email ?? ""}
+            </p>
+          </div>
+          {streak.currentStreak > 0 && (
+            <div className="flex items-center gap-0.5 flex-shrink-0 px-1.5 py-1 rounded-lg"
+              style={{ background: "var(--gold-bg)" }}>
+              <span className="text-[12px] font-black" style={{ color: "var(--gold)" }}>
+                {streak.currentStreak}
+              </span>
+              <span className="text-[11px]">🔥</span>
             </div>
           )}
         </div>
       </div>
 
-      {/* NAVEGAÇÃO */}
-      <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto">
-        {MENU.map((section) => (
+      {/* ── NAVEGAÇÃO ── */}
+      <nav className="flex-1 px-3 py-2 overflow-y-auto space-y-4 min-h-0">
+        {MENU.map(section => (
           <div key={section.section}>
-            <p className="text-[12px] uppercase tracking-widest font-semibold mb-2 px-2" style={s.section}>
+            <p className="text-[10px] font-bold uppercase tracking-widest px-2.5 mb-1"
+              style={{ color: "var(--text-faint)" }}>
               {section.section}
             </p>
             <div className="space-y-0.5">
-              {section.items.map((item) => {
+              {section.items.map(item => {
                 const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-                const isLocked = item.premium && !isPremium;
                 const icon = Icons[item.icon as keyof typeof Icons];
                 return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="flex items-center justify-between px-2.5 py-2 rounded-lg transition-all"
-                    style={isActive ? s.itemActive : isLocked ? s.itemLocked : s.itemDefault}
+                  <Link key={item.href} href={item.href}
+                    className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-all group relative"
+                    style={{
+                      background: isActive ? "var(--gold-bg)" : "transparent",
+                      color: isActive ? "var(--gold)" : "var(--text-secondary)",
+                    }}
                     onMouseEnter={e => {
                       if (!isActive) {
                         (e.currentTarget as HTMLElement).style.background = "var(--app-bg-4)";
-                        if (!isLocked) (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
+                        (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
                       }
                     }}
                     onMouseLeave={e => {
                       if (!isActive) {
                         (e.currentTarget as HTMLElement).style.background = "transparent";
-                        (e.currentTarget as HTMLElement).style.color = isLocked ? "var(--text-secondary)" : "var(--text-primary)";
+                        (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
                       }
-                    }}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <span className="flex-shrink-0">{icon}</span>
-                      <span className="text-[14px] font-medium">{item.name}</span>
-                    </div>
-                    {isLocked && <span style={{ color: "var(--text-tertiary)" }}>{Icons.lock}</span>}
+                    }}>
+                    {isActive && (
+                      <div className="absolute left-0 top-1 bottom-1 w-0.5 rounded-full"
+                        style={{ background: "var(--gold)" }}/>
+                    )}
+                    <span className="flex-shrink-0 ml-0.5 w-4 h-4 flex items-center justify-center">{icon}</span>
+                    <span className="text-[14px] font-medium">{item.name}</span>
                   </Link>
                 );
               })}
@@ -267,53 +188,59 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* RODAPÉ */}
-      <div className="px-3 pb-4 pt-3 border-t space-y-1" style={{ borderColor: "var(--app-border)" }}>
+      {/* ── RODAPÉ ── */}
+      <div className="px-3 pt-2 pb-5 border-t"
+        style={{ borderColor: "var(--app-border)" }}>
 
-        {/* TOGGLE TEMA */}
-        <button
-          onClick={toggleTheme}
-          className="w-full flex items-center justify-between px-2.5 py-2 rounded-lg transition-all mb-2"
-          style={{ color: "var(--text-tertiary)" }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--app-bg-4)"; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
-        >
-          <div className="flex items-center gap-2.5">
-            <span>{isDark ? Icons.moon : Icons.sun}</span>
-            <span className="text-[14px] font-medium">{isDark ? "Tema escuro" : "Tema claro"}</span>
-          </div>
-          <div
-            className="w-8 h-4 rounded-full relative transition-colors"
-            style={{ background: isDark ? "var(--app-bg-4)" : "var(--gold)" }}
-          >
-            <div
-              className="absolute top-0.5 w-3 h-3 rounded-full transition-all"
+        <Link href="/configuracoes"
+          className="flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg transition-all w-full mt-1"
+          style={{
+            color: pathname === "/configuracoes" ? "var(--gold)" : "var(--text-secondary)",
+            background: pathname === "/configuracoes" ? "var(--gold-bg)" : "transparent",
+          }}
+          onMouseEnter={e => { if (pathname !== "/configuracoes") { (e.currentTarget as HTMLElement).style.background = "var(--app-bg-4)"; (e.currentTarget as HTMLElement).style.color = "var(--text-primary)"; } }}
+          onMouseLeave={e => { if (pathname !== "/configuracoes") { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)"; } }}>
+          <span className="flex-shrink-0">{Icons.settings}</span>
+          <span className="text-[14px] font-medium">Configurações</span>
+        </Link>
+
+        <div className="px-1 py-1 rounded-xl flex gap-0.5 mt-2"
+          style={{ background: "var(--app-bg-3)", border: "1px solid var(--app-border)" }}>
+          {([
+            { id: "system" as const, icon: "💻", label: "Sistema" },
+            { id: "dark"   as const, icon: "🌙", label: "Escuro"  },
+            { id: "light"  as const, icon: "☀️", label: "Claro"   },
+          ]).map(t => (
+            <button key={t.id} onClick={() => setTheme(t.id)}
+              className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
               style={{
-                background: isDark ? "var(--text-muted)" : "#000",
-                left: isDark ? "2px" : "calc(100% - 14px)",
-              }}
-            />
-          </div>
-        </button>
+                background: preference === t.id ? "var(--app-bg)" : "transparent",
+                color: preference === t.id ? "var(--text-primary)" : "var(--text-faint)",
+                boxShadow: preference === t.id ? "0 1px 3px rgba(0,0,0,0.2)" : "none",
+              }}>
+              <span className="text-[11px]">{t.icon}</span>
+              <span>{t.label}</span>
+            </button>
+          ))}
+        </div>
 
         {!isPremium && (
-          <Link
-            href="/upgrade"
-            className="flex items-center justify-center gap-2 w-full text-xs font-semibold py-2.5 rounded-lg transition-all hover:scale-[1.02] mb-1"
-            style={{ background: "var(--gold)", color: "#000" }}
-          >
-            <span>{Icons.upgrade}</span>
-            Fazer upgrade
-          </Link>
+          <>
+            <button onClick={() => setShowUpgrade(true)}
+              className="flex items-center justify-center gap-2 w-full text-[13px] font-bold py-2.5 rounded-xl transition-all hover:scale-[1.01] mt-2"
+              style={{ background: "var(--gold)", color: "#000" }}>
+              <span>{Icons.upgrade}</span>
+              Fazer upgrade
+            </button>
+            {showUpgrade && <UpgradeModal onClose={() => setShowUpgrade(false)} />}
+          </>
         )}
 
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-all"
+        <button onClick={handleLogout}
+          className="w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg transition-all mt-2"
           style={{ color: "var(--text-secondary)" }}
           onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--danger)"; (e.currentTarget as HTMLElement).style.background = "var(--danger-bg)"; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}
-        >
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)"; (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
           <span className="flex-shrink-0">{Icons.logout}</span>
           <span className="text-[14px] font-medium">Sair</span>
         </button>

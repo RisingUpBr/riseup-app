@@ -76,7 +76,7 @@ export default function DiarioPage() {
   const today = getTodayDate();
   const sevenDays = getWeekDays(weekRef);
   const streak = calculateStreak(entries);
-  const canCreate = isPremium || entries.length < ((userData?.limits as any)?.dailyNotes ?? 5);
+  const canCreate = isPremium || !userData || entries.length < ((userData?.limits as any)?.dailyNotes ?? 5);
   const dailyPrompt = getDailyPrompt(mood);
 
   useEffect(() => {
@@ -102,7 +102,9 @@ export default function DiarioPage() {
       setContent(existing.content);
       setMood(existing.mood ?? null);
     } else if (date === today) {
-      if (!canCreate) { router.push("/planos-app"); return; }
+      if (userData && !isPremium && entries.length >= ((userData?.limits as any)?.dailyNotes ?? 5)) {
+        router.push("/planos-app"); return;
+      }
       const entry = await getOrCreateTodayEntry(user.uid);
       setActiveEntry(entry);
       setTitle(""); setContent(""); setMood(null);
