@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function ConectePage() {
   return (
-    <main className="min-h-screen bg-[#0A0A0A] text-white overflow-hidden">
+    <main className="min-h-screen bg-[#000000] text-white overflow-hidden">
 
       <style>{`
         @keyframes globeGlow {
@@ -23,121 +23,101 @@ export default function ConectePage() {
         .dot-c      { animation: dotTwinkle  4.0s ease-in-out infinite 1.4s; }
         .dot-d      { animation: dotTwinkle  3.0s ease-in-out infinite 2.1s; }
         .flow-line  { animation: lineFlow    3s  linear        infinite; }
-        @keyframes beamPulse {
-          0%, 100% { opacity: 0.72; }
-          50%       { opacity: 1; }
-        }
-        .beam-svg { animation: beamPulse 4s ease-in-out infinite; }
       `}</style>
 
-      {/* ── HERO ────────────────────────────────────────────────────────── */}
-      <section className="relative pt-16 pb-0 sm:pt-20 sm:pb-0 px-4 sm:px-6 lg:px-16">
-        {/* Radial glow — Bolt.new inspired */}
+      {/* ── HERO ── */}
+      <section
+        className="relative py-[100px] px-4 sm:px-6 lg:px-16 overflow-hidden"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 50% at 50% 40%, rgba(212,175,55,0.10) 0%, transparent 70%), #000",
+        }}
+      >
+        <div className="max-w-[1400px] mx-auto relative z-10 text-center">
+          {/* Label */}
+          <p
+            className="text-[12px] font-bold uppercase mb-6"
+            style={{ color: "#D4AF37", letterSpacing: "0.2em" }}
+          >
+            ECOSSISTEMA RISE UP
+          </p>
+
+          {/* H1 */}
+          <h1
+            className="font-black mb-6"
+            style={{ fontSize: "clamp(40px, 6vw, 72px)", lineHeight: "1.0" }}
+          >
+            <span style={{ color: "#F5F5F5" }}>Conecte-se ao</span>
+            <br />
+            <span style={{ color: "#D4AF37" }}>ecossistema Rise Up</span>
+          </h1>
+
+          {/* Subtítulo */}
+          <p
+            className="text-lg mx-auto"
+            style={{ color: "#888", maxWidth: "460px" }}
+          >
+            Conteúdos, ferramentas e caminhos diferentes, todos levando ao
+            mesmo objetivo: evolução real.
+          </p>
+        </div>
+
+        {/* Cone de luz */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute bottom-0 left-0 w-full h-48 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 60%, rgba(212,175,55,0.07) 0%, transparent 70%)",
+              "linear-gradient(to bottom, rgba(212,175,55,0.07) 0%, rgba(212,175,55,0.01) 100%)",
+            clipPath: "polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)",
           }}
         />
-
-        <div className="max-w-[1400px] mx-auto relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            {/* Headline */}
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              Conecte-se ao<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#C5A028]">
-                ecossistema Rise Up
-              </span>
-            </h1>
-
-            {/* Subheadline */}
-            <p className="text-xl sm:text-2xl text-neutral-300 mb-12 leading-relaxed max-w-3xl mx-auto">
-              Conteúdos, ferramentas e caminhos diferentes, todos levando ao
-              mesmo objetivo:{" "}
-              <span className="text-[#D4AF37] font-semibold">evolução real</span>.
-            </p>
-
-            {/* Beam de luz — transição visual estilo Bolt.new */}
-            <div className="flex justify-center mb-6" aria-hidden="true">
-              <svg
-                width="140"
-                height="180"
-                viewBox="0 0 140 180"
-                fill="none"
-                className="beam-svg"
-                style={{ overflow: "visible" }}
-              >
-                <defs>
-                  {/* Gradiente do fio: invisível no topo, brilhante na base */}
-                  <linearGradient id="heroBeam" x1="70" y1="0" x2="70" y2="155" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%"   stopColor="#D4AF37" stopOpacity="0" />
-                    <stop offset="50%"  stopColor="#D4AF37" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#E5C158" stopOpacity="1" />
-                  </linearGradient>
-                  {/* Halo externo — ilumina o fundo escuro */}
-                  <radialGradient id="glowOuter" cx="70" cy="162" r="60" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%"   stopColor="#D4AF37" stopOpacity="0.14" />
-                    <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
-                  </radialGradient>
-                  {/* Halo médio */}
-                  <radialGradient id="glowMid" cx="70" cy="162" r="30" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%"   stopColor="#D4AF37" stopOpacity="0.45" />
-                    <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
-                  </radialGradient>
-                  {/* Halo interno — núcleo quente */}
-                  <radialGradient id="glowInner" cx="70" cy="162" r="11" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%"   stopColor="#E5C158" stopOpacity="0.95" />
-                    <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
-                  </radialGradient>
-                </defs>
-
-                {/* Fio vertical longo */}
-                <line x1="70" y1="0" x2="70" y2="155" stroke="url(#heroBeam)" strokeWidth="1.5" />
-
-                {/* Camada 1 — halo externo de difusão */}
-                <circle cx="70" cy="162" r="60" fill="url(#glowOuter)" />
-                {/* Camada 2 — halo médio */}
-                <circle cx="70" cy="162" r="30" fill="url(#glowMid)" />
-                {/* Camada 3 — halo interno quente */}
-                <circle cx="70" cy="162" r="11" fill="url(#glowInner)" />
-                {/* Ponto brilhante */}
-                <circle cx="70" cy="162" r="3.5" fill="#E5C158" opacity="0.98" />
-                {/* Núcleo branco */}
-                <circle cx="70" cy="162" r="1.5" fill="white" opacity="0.92" />
-              </svg>
-            </div>
-          </div>
-        </div>
       </section>
 
-      {/* ── COMO FUNCIONA (globo + nós) ─────────────────────────────────── */}
-      <section className="pt-6 pb-0 px-4 sm:px-6 lg:px-16 bg-neutral-950">
+      {/* ── DIAGRAMA DO ECOSSISTEMA ── */}
+      <section className="py-[100px] px-4 sm:px-6 lg:px-16 bg-[#000000]">
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-              Como funciona o ecossistema
+            <p
+              className="text-[11px] font-bold uppercase mb-4"
+              style={{ color: "#D4AF37", letterSpacing: "0.2em" }}
+            >
+              COMO FUNCIONA O ECOSSISTEMA
+            </p>
+            <h2
+              className="font-extrabold mb-4"
+              style={{ fontSize: 38, color: "#F5F5F5" }}
+            >
+              Tudo conectado. Tudo com propósito.
             </h2>
-            <p className="text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
-              Cada ponto foi criado para se complementar. Comece por onde fizer
-              mais sentido para você. Tudo converge para o mesmo resultado.
+            <p
+              className="mx-auto text-center"
+              style={{ color: "#888", maxWidth: "440px" }}
+            >
+              Nossa infraestrutura foi desenhada para que cada ponto de contato
+              acelere seu desenvolvimento de forma integrada.
             </p>
           </div>
 
           {/* Diagrama */}
           <div className="relative max-w-3xl mx-auto mb-2">
 
-            {/* Linhas de conexão */}
+            {/* Linhas de conexão — coordenadas apontam para o centro de cada nó (96×96px) */}
             <svg
               className="absolute inset-0 w-full h-full pointer-events-none z-0"
               style={{ opacity: 0.28 }}
             >
-              <line x1="50%" y1="50%" x2="50%" y2="6%"  stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" />
-              <line x1="50%" y1="50%" x2="88%" y2="25%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "0.5s" }} />
-              <line x1="50%" y1="50%" x2="88%" y2="75%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "1s" }} />
-              <line x1="50%" y1="50%" x2="50%" y2="94%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "1.5s" }} />
-              <line x1="50%" y1="50%" x2="12%" y2="75%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "2s" }} />
-              <line x1="50%" y1="50%" x2="12%" y2="25%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "2.5s" }} />
+              {/* Topo: top-0, centro em y=8% (48/600) */}
+              <line x1="50%" y1="50%" x2="50%" y2="8%"  stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" />
+              {/* Topo-direita: top-1/4 right-4, centro em (92%, 33%) */}
+              <line x1="50%" y1="50%" x2="92%" y2="33%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "0.5s" }} />
+              {/* Base-direita: bottom-1/4 right-4, centro em (92%, 67%) */}
+              <line x1="50%" y1="50%" x2="92%" y2="67%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "1s" }} />
+              {/* Base: bottom-0, centro em y=92% (552/600) */}
+              <line x1="50%" y1="50%" x2="50%" y2="92%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "1.5s" }} />
+              {/* Base-esquerda: bottom-1/4 left-4, centro em (8%, 67%) */}
+              <line x1="50%" y1="50%" x2="8%"  y2="67%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "2s" }} />
+              {/* Topo-esquerda: top-1/4 left-4, centro em (8%, 33%) */}
+              <line x1="50%" y1="50%" x2="8%"  y2="33%" stroke="#D4AF37" strokeWidth="1.5" strokeDasharray="4 4" className="flow-line" style={{ animationDelay: "2.5s" }} />
             </svg>
 
             <div className="relative w-full h-[500px] sm:h-[600px]">
@@ -326,129 +306,184 @@ export default function ConectePage() {
 
             </div>
           </div>
+
+          {/* Texto abaixo do diagrama */}
+          <div className="max-w-2xl mx-auto text-center mt-20">
+            <p
+              className="text-sm uppercase tracking-widest font-semibold mb-5"
+              style={{ color: "#D4AF37" }}
+            >
+              Explore o ecossistema
+            </p>
+            <p className="text-xl sm:text-2xl text-neutral-300 leading-relaxed">
+              Escolha por onde começar sua jornada. Cada caminho leva ao mesmo
+              lugar: uma versão melhor de você.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* ── TRANSIÇÃO (substituiu os cards) ─────────────────────────────── */}
-      <section className="pb-10 px-4 sm:px-6 lg:px-16 bg-[#0A0A0A]" style={{ paddingTop: "16px" }}>
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-sm uppercase tracking-widest text-[#D4AF37] font-semibold mb-5">
-            Explore o ecossistema
-          </p>
-          <p className="text-xl sm:text-2xl text-neutral-300 leading-relaxed">
-            Escolha por onde começar sua jornada. Cada caminho leva ao mesmo
-            lugar: uma versão melhor de você.
-          </p>
-        </div>
-      </section>
-
-      {/* ── DEPOIMENTOS ─────────────────────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-16 bg-neutral-950">
+      {/* ── DEPOIMENTOS ── */}
+      <section className="py-[100px] px-4 sm:px-6 lg:px-16 bg-[#060606]">
         <div className="max-w-[1200px] mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               Resultados de quem já começou
             </h2>
-            <p className="text-neutral-400">Pessoas reais, transformações reais</p>
+            <p className="text-neutral-400">Pessoas reais, transformações reais.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
 
-            {/* Carla Mendes — 4.5 ★ */}
-            <div className="bg-gradient-to-br from-neutral-900 to-black border border-neutral-800 rounded-2xl p-6 flex flex-col">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(4)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+            {/* Carla Mendes — 4 ★ */}
+            <div
+              className="flex flex-col h-full"
+              style={{
+                background: "#0a0a0a",
+                border: "1px solid #161616",
+                borderRadius: 16,
+                padding: 32,
+              }}
+            >
+              <div
+                className="leading-none mb-4 font-serif"
+                style={{ fontSize: 48, color: "#D4AF37", opacity: 0.5, fontFamily: "Georgia, serif" }}
+              >
+                &ldquo;
+              </div>
+              <p className="text-sm leading-relaxed italic flex-grow mb-6" style={{ color: "#BBBBBB" }}>
+                Comprei o plano Avançado sem muita expectativa. A qualidade do
+                conteúdo foi além do que imaginei. Comecei a criar uma rotina
+                de verdade.
+              </p>
+              <div className="border-t pt-6" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(4)].map((_, i) => (
+                    <svg key={i} className="w-4 h-4" fill="#D4AF37" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                  <svg className="w-4 h-4" fill="#2a2a2a" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
-                ))}
-                <svg className="w-5 h-5" viewBox="0 0 20 20">
-                  <defs>
-                    <linearGradient id="half-carla" x1="0" x2="1" y1="0" y2="0">
-                      <stop offset="50%" stopColor="#D4AF37" />
-                      <stop offset="50%" stopColor="#404040" />
-                    </linearGradient>
-                  </defs>
-                  <path fill="url(#half-carla)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              </div>
-              <p className="text-neutral-300 mb-6 leading-relaxed text-sm">
-                "Comprei o plano Avançado sem muita expectativa e me surpreendi com a qualidade do conteúdo. Não transformou minha vida da noite para o dia como eu esperava, foi gradual. Mas olhando para trás, minha rotina mudou completamente. Só acho que tem material demais. Precisei de umas semanas só para absorver tudo."
-              </p>
-              <div className="flex items-center gap-3 mt-auto">
-                <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=112&h=112&fit=crop&crop=face&q=80"
-                  alt="Carla Mendes"
-                  className="w-14 h-14 rounded-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                <div>
-                  <p className="font-semibold">Carla Mendes</p>
-                  <p className="text-neutral-500 text-sm">Designer Freelancer</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <img
+                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=112&h=112&fit=crop&crop=face&q=80"
+                    alt="Carla Mendes"
+                    className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div>
+                    <p className="font-bold text-sm text-white">Carla Mendes</p>
+                    <p className="text-[11px] uppercase tracking-wider" style={{ color: "#444" }}>
+                      Estudante de Engenharia
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Rafael Torres — 4 ★ */}
-            <div className="bg-gradient-to-br from-neutral-900 to-black border border-neutral-800 rounded-2xl p-6 flex flex-col">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(4)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-                <svg className="w-5 h-5 text-neutral-700" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+            {/* Rafael Torres — 4.5 ★ */}
+            <div
+              className="flex flex-col h-full"
+              style={{
+                background: "#0a0a0a",
+                border: "1px solid #161616",
+                borderRadius: 16,
+                padding: 32,
+              }}
+            >
+              <div
+                className="leading-none mb-4 font-serif"
+                style={{ fontSize: 48, color: "#D4AF37", opacity: 0.5, fontFamily: "Georgia, serif" }}
+              >
+                &ldquo;
               </div>
-              <p className="text-neutral-300 mb-6 leading-relaxed text-sm">
-                "O app é exatamente o que eu precisava para organizar minha bagunça mental. Anotações, metas e rotina num lugar só. Minha única crítica é que no começo a curva de aprendizado é real. Levei uns dias para entender o sistema de notas ramificadas. Depois que clicou, não larguei mais."
+              <p className="text-sm leading-relaxed italic flex-grow mb-6" style={{ color: "#BBBBBB" }}>
+                O app é exatamente o que precisava para organizar minha bagunça
+                mental. Anotações, metas e rotinas em um lugar só que
+                finalmente funciona.
               </p>
-              <div className="flex items-center gap-3 mt-auto">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=112&h=112&fit=crop&crop=face&q=80"
-                  alt="Rafael Torres"
-                  className="w-14 h-14 rounded-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                <div>
-                  <p className="font-semibold">Rafael Torres</p>
-                  <p className="text-neutral-500 text-sm">Empreendedor</p>
+              <div className="border-t pt-6" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(4)].map((_, i) => (
+                    <svg key={i} className="w-4 h-4" fill="#D4AF37" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                  <svg className="w-4 h-4" viewBox="0 0 20 20">
+                    <defs>
+                      <linearGradient id="half-rafael" x1="0" x2="1" y1="0" y2="0">
+                        <stop offset="50%" stopColor="#D4AF37" />
+                        <stop offset="50%" stopColor="#2a2a2a" />
+                      </linearGradient>
+                    </defs>
+                    <path fill="url(#half-rafael)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </div>
+                <div className="flex items-center gap-3">
+                  <img
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=112&h=112&fit=crop&crop=face&q=80"
+                    alt="Rafael Torres"
+                    className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div>
+                    <p className="font-bold text-sm text-white">Rafael Torres</p>
+                    <p className="text-[11px] uppercase tracking-wider" style={{ color: "#444" }}>
+                      Desenvolvedor
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Júlia Ferreira — 4.5 ★ */}
-            <div className="bg-gradient-to-br from-neutral-900 to-black border border-neutral-800 rounded-2xl p-6 flex flex-col">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(4)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+            {/* Julia Ferreira — 4 ★ */}
+            <div
+              className="flex flex-col h-full"
+              style={{
+                background: "#0a0a0a",
+                border: "1px solid #161616",
+                borderRadius: 16,
+                padding: 32,
+              }}
+            >
+              <div
+                className="leading-none mb-4 font-serif"
+                style={{ fontSize: 48, color: "#D4AF37", opacity: 0.5, fontFamily: "Georgia, serif" }}
+              >
+                &ldquo;
+              </div>
+              <p className="text-sm leading-relaxed italic flex-grow mb-6" style={{ color: "#BBBBBB" }}>
+                Achei que seria mais um app de produtividade. O que me
+                surpreendeu foi a simplicidade. Sem curva de aprendizado, só
+                resultados.
+              </p>
+              <div className="border-t pt-6" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(4)].map((_, i) => (
+                    <svg key={i} className="w-4 h-4" fill="#D4AF37" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                  <svg className="w-4 h-4" fill="#2a2a2a" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
-                ))}
-                <svg className="w-5 h-5" viewBox="0 0 20 20">
-                  <defs>
-                    <linearGradient id="half-julia" x1="0" x2="1" y1="0" y2="0">
-                      <stop offset="50%" stopColor="#D4AF37" />
-                      <stop offset="50%" stopColor="#404040" />
-                    </linearGradient>
-                  </defs>
-                  <path fill="url(#half-julia)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              </div>
-              <p className="text-neutral-300 mb-6 leading-relaxed text-sm">
-                "Achei que seria mais um app de produtividade qualquer. Mas a integração entre os infoprodutos e o app faz diferença. Uso os flashcards toda semana. O que me incomodou um pouco é que algumas funcionalidades avançadas só vêm no plano pago. Entendo o modelo, só não esperava. Vale muito o investimento."
-              </p>
-              <div className="flex items-center gap-3 mt-auto">
-                <img
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=112&h=112&fit=crop&crop=face&q=80"
-                  alt="Júlia Ferreira"
-                  className="w-14 h-14 rounded-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                <div>
-                  <p className="font-semibold">Júlia Ferreira</p>
-                  <p className="text-neutral-500 text-sm">Estudante de Medicina</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=112&h=112&fit=crop&crop=face&q=80"
+                    alt="Julia Ferreira"
+                    className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div>
+                    <p className="font-bold text-sm text-white">Julia Ferreira</p>
+                    <p className="text-[11px] uppercase tracking-wider" style={{ color: "#444" }}>
+                      Psicóloga
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -457,29 +492,24 @@ export default function ConectePage() {
         </div>
       </section>
 
-      {/* ── CTA FINAL — fundo escuro, continuidade com o footer ─────────── */}
-      <section className="py-24 px-4 sm:px-6 lg:px-16 bg-[#000000]">
+      {/* ── CTA FINAL ── */}
+      <section className="py-[120px] px-4 sm:px-6 lg:px-16 bg-[#000000]">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight">
+          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-10 leading-tight">
             Sua melhor versão<br />não começa amanhã.
           </h2>
-
-          <p className="text-xl text-neutral-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Comece agora com o que temos de gratuito de verdade, sem pegadinha.
-            Sua próxima versão começa com o primeiro passo.
-          </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/recursos"
-              className="w-full sm:w-auto px-8 py-4 bg-[#D4AF37] text-black rounded-xl font-bold hover:bg-[#C5A028] transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105"
+              className="w-full sm:w-auto px-8 py-4 bg-[#D4AF37] text-black rounded-xl font-bold hover:scale-105 transition-all duration-200"
             >
               Começar com recursos gratuitos
             </Link>
 
             <Link
               href="/app"
-              className="w-full sm:w-auto px-8 py-4 bg-white text-black rounded-xl font-bold hover:bg-neutral-100 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105"
+              className="w-full sm:w-auto px-8 py-4 bg-white text-black rounded-xl font-bold hover:scale-105 transition-all duration-200"
             >
               Conhecer o App
             </Link>

@@ -15,7 +15,8 @@
       "PowerShell(Get-ChildItem \"D:\\\\Área de trabalho\\\\Arquivos Claude e Codex\" -ErrorAction SilentlyContinue; Get-ChildItem \"D:\\\\Desktop\\\\Arquivos Claude e Codex\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:USERPROFILE\\\\Desktop\\\\Arquivos Claude e Codex\" -ErrorAction SilentlyContinue)",
       "Bash(npx tsc *)",
       "Bash(node -e ' *)",
-      "Bash(node -e \"const fs=require\\('fs'\\); const p='C:\\\\\\\\\\\\\\\\Users\\\\\\\\\\\\\\\\Usuario\\\\\\\\\\\\\\\\.claude\\\\\\\\\\\\\\\\projects\\\\\\\\\\\\\\\\c--Users-Usuario-riseup-app\\\\\\\\\\\\\\\\42386a18-35e2-49e1-a955-eed2365bc39f.jsonl'; console.log\\(fs.existsSync\\(p\\)\\);\")"
+      "Bash(node -e \"const fs=require\\('fs'\\); const p='C:\\\\\\\\\\\\\\\\Users\\\\\\\\\\\\\\\\Usuario\\\\\\\\\\\\\\\\.claude\\\\\\\\\\\\\\\\projects\\\\\\\\\\\\\\\\c--Users-Usuario-riseup-app\\\\\\\\\\\\\\\\42386a18-35e2-49e1-a955-eed2365bc39f.jsonl'; console.log\\(fs.existsSync\\(p\\)\\);\")",
+      "Bash(Select-String -Path \"c:\\\\Users\\\\Usuario\\\\riseup-app\\\\app\\\\\\(site\\)\\\\conecte-se\\\\page.tsx\" -Pattern \"py-|bg-neutral|bg-\\\\[#0A0A0A\\\\]|Comece agora|TRANSIÇÃO|paddingTop|pt-6|pb-0|py-24|py-20\")"
     ]
   }
 }
