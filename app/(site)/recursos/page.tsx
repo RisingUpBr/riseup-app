@@ -101,51 +101,44 @@ export default function RecursosPage() {
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section
-        className="relative overflow-hidden py-24 sm:py-32 px-4 sm:px-6 lg:px-16"
+        className="relative min-h-screen flex flex-col items-center justify-center px-6 md:px-[80px]"
         style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 65% 50%, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.04) 50%, transparent 80%), #000000",
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: "40px 40px",
+          backgroundColor: "#000000",
         }}
       >
-        <div className="max-w-[1600px] mx-auto relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(circle at center bottom, rgba(212,175,55,0.10) 0%, transparent 70%)" }}
+        />
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              Recursos práticos para organizar sua vida
-            </h1>
-
-            <p className="text-xl sm:text-2xl text-neutral-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-              Materiais gratuitos criados para ajudar você a clarear a mente,
-              construir rotinas melhores e evoluir com consistência.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-6 text-neutral-400 mb-16">
-              {["Métodos aplicáveis", "Organização prática", "Desenvolvimento real"].map((item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
-                  <span className="text-sm">{item}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Scroll indicator — abaixo de todo o conteúdo */}
-            <button
-              onClick={scrollToMateriais}
-              className="inline-flex flex-col items-center gap-2 text-[#D4AF37] hover:opacity-75 transition-opacity"
-            >
-              <span className="text-xs font-semibold uppercase tracking-widest">Escolha seu material</span>
-              <svg
-                className="w-9 h-9 animate-bounce"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
+        <div className="relative z-10 flex flex-col items-center text-center max-w-[1400px] w-full">
+          <span className="text-[#D4AF37] text-[11px] font-bold tracking-[0.3em] uppercase mb-4">
+            CONTEÚDO GRATUITO
+          </span>
+          <h1 className="text-[64px] font-black leading-[1.05] text-[#F5F5F5] max-w-[800px] mb-10">
+            Recursos práticos para organizar sua vida
+          </h1>
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {["Métodos aplicáveis", "Organização prática", "Desenvolvimento real"].map((tag) => (
+              <span key={tag} className="px-5 py-2 border border-[rgba(212,175,55,0.3)] bg-[rgba(212,175,55,0.08)] text-[#D4AF37] rounded-full text-[12px] font-bold tracking-wide">
+                {tag}
+              </span>
+            ))}
           </div>
+          <button
+            onClick={scrollToMateriais}
+            className="flex flex-col items-center gap-3 mt-4 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <span className="text-[10px] text-[#555] font-bold uppercase tracking-[0.2em]">ESCOLHA SEU MATERIAL</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#D4AF37" strokeWidth="2" className="animate-bounce">
+              <path d="M5 8l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
         </div>
       </section>
 
@@ -182,24 +175,10 @@ export default function RecursosPage() {
 
                       {/* Badges */}
                       <div className="flex items-center gap-2 mb-6">
-                        <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-neutral-800 border border-neutral-700 rounded-lg text-xs font-semibold uppercase tracking-wider">
-                          {resource.type === "pdf" ? (
-                            <>
-                              <svg className="w-4 h-4 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                              </svg>
-                              <span className="text-neutral-300">Guia Prático</span>
-                            </>
-                          ) : (
-                            <>
-                              <svg className="w-4 h-4 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                              </svg>
-                              <span className="text-neutral-300">Curso por Email</span>
-                            </>
-                          )}
+                        <span className="text-[10px] font-bold tracking-[0.15em] text-[#D4AF37] bg-[rgba(212,175,55,0.10)] px-3 py-1 uppercase">
+                          {resource.type === "pdf" ? "GUIA PRÁTICO" : "CURSO POR EMAIL"}
                         </span>
-                        <span className="px-3 py-1.5 bg-[#D4AF37]/10 border border-[#D4AF37]/30 rounded-lg text-[#D4AF37] text-xs font-bold uppercase tracking-wider">
+                        <span className="text-[10px] font-bold tracking-[0.15em] text-neutral-500 bg-neutral-900 px-3 py-1 uppercase">
                           {categoryMap[resource.title] ?? "CONTEÚDO"}
                         </span>
                       </div>
@@ -236,9 +215,23 @@ export default function RecursosPage() {
 
                       <button
                         onClick={() => handleAccessResource(resource.id)}
-                        className="w-full py-4 bg-[#D4AF37] hover:bg-[#C5A028] text-black font-bold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#D4AF37]/20"
+                        className="w-full py-4 bg-[#D4AF37] hover:bg-[#C5A028] text-black font-bold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#D4AF37]/20 flex items-center justify-center gap-2"
                       >
-                        Acessar gratuitamente
+                        {resource.type === "pdf" ? (
+                          <>
+                            Acessar gratuitamente
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17v2a2 2 0 002 2h16a2 2 0 002-2v-2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </>
+                        ) : (
+                          <>
+                            Inscrever-se agora
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </>
+                        )}
                       </button>
 
                       <p className="text-xs text-neutral-500 text-center mt-4">
@@ -304,19 +297,24 @@ export default function RecursosPage() {
               <p className="text-neutral-400 text-sm leading-relaxed mb-8">
                 Métodos claros para organizar rotina, estudos, trabalho e projetos pessoais.
               </p>
-              <div className="mt-auto space-y-2.5">
+              <div className="mt-6 space-y-3">
                 {[
-                  "Clareza sobre o que fazer primeiro",
-                  "Estrutura que cabe na sua rotina",
-                  "Resultado visível desde o primeiro dia",
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded bg-[#D4AF37] flex items-center justify-center flex-shrink-0">
-                      <svg className="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
+                  { done: true, text: "Clareza sobre o que fazer primeiro" },
+                  { done: true, text: "Estrutura que cabe na sua rotina" },
+                  { done: true, text: "Resultado visível desde o primeiro dia" },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div
+                      className="w-5 h-5 rounded border-2 border-[#D4AF37] flex items-center justify-center flex-shrink-0"
+                      style={{ background: item.done ? "#D4AF37" : "transparent" }}
+                    >
+                      {item.done && (
+                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#000" strokeWidth="2.5">
+                          <path d="M2 6l3 3 5-5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
                     </div>
-                    <span className="text-sm text-neutral-300">{item}</span>
+                    <span className="text-[13px] text-[#888]">{item.text}</span>
                   </div>
                 ))}
               </div>
@@ -328,9 +326,9 @@ export default function RecursosPage() {
               <p className="text-neutral-400 text-sm leading-relaxed mb-8">
                 Ferramentas para entender padrões e tomar decisões melhores.
               </p>
-              <div className="mt-auto text-center">
-                <p className="text-6xl font-black text-[#D4AF37] leading-none">3x</p>
-                <p className="text-xs text-neutral-500 mt-2 uppercase tracking-wider">mais foco</p>
+              <div className="mt-6 flex flex-col items-center justify-center gap-1">
+                <span className="text-[80px] font-black text-[#D4AF37] leading-none">3x</span>
+                <span className="text-[11px] text-[#555] font-bold uppercase tracking-[0.15em]">mais foco</span>
               </div>
             </div>
 
@@ -340,17 +338,20 @@ export default function RecursosPage() {
               <p className="text-neutral-400 text-sm leading-relaxed mb-8">
                 Simples nos dias difíceis. Poderosos nos bons dias.
               </p>
-              <div className="mt-auto space-y-2">
-                {["Planejamento", "Execução", "Revisão"].map((block, i) => (
-                  <div
-                    key={block}
-                    className="h-8 rounded-lg flex items-center px-3"
-                    style={{
-                      background: `rgba(212,175,55,${0.15 + i * 0.08})`,
-                      width: `${100 - i * 10}%`,
-                    }}
-                  >
-                    <span className="text-[#D4AF37] text-xs font-bold">{block}</span>
+              <div className="mt-6 space-y-4">
+                {[
+                  { label: "Planejamento", pct: 85 },
+                  { label: "Execução", pct: 70 },
+                  { label: "Revisão", pct: 60 },
+                ].map((item) => (
+                  <div key={item.label}>
+                    <div className="flex justify-between text-[11px] font-bold mb-1.5">
+                      <span className="text-[#666] uppercase tracking-[0.1em]">{item.label}</span>
+                      <span className="text-[#D4AF37]">{item.pct}%</span>
+                    </div>
+                    <div className="h-[5px] bg-[#1A1A1A] rounded-full overflow-hidden">
+                      <div className="h-full bg-[#D4AF37] rounded-full transition-all duration-700" style={{ width: `${item.pct}%` }} />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -364,23 +365,22 @@ export default function RecursosPage() {
               <p className="text-neutral-400 text-sm leading-relaxed mb-8">
                 Foco, execução e consistência como hábito, não como exceção.
               </p>
-              <div className="mt-auto">
-                <svg viewBox="0 0 280 80" className="w-full opacity-70">
-                  <line x1="10" y1="70" x2="10" y2="5" stroke="#444" strokeWidth="0.8" />
-                  <line x1="10" y1="70" x2="275" y2="70" stroke="#444" strokeWidth="0.8" />
-                  {[0, 1, 2, 3].map((i) => (
-                    <line key={i} x1="10" y1={70 - i * 20} x2="275" y2={70 - i * 20} stroke="#333" strokeWidth="0.4" />
-                  ))}
-                  <path
-                    d="M15 65 C40 60 60 58 80 50 C100 42 120 35 140 28 C160 21 180 16 200 12 C220 8 240 8 265 7"
-                    stroke="#D4AF37"
-                    strokeWidth="2"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  <circle cx="265" cy="7" r="4" fill="#D4AF37" />
-                </svg>
-              </div>
+              <svg viewBox="0 0 400 140" fill="none" className="w-full mt-6">
+                <defs>
+                  <linearGradient id="curveGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
+                  </linearGradient>
+                  <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <circle cx="1" cy="1" r="1" fill="rgba(212,175,55,0.06)" />
+                  </pattern>
+                </defs>
+                <rect width="400" height="140" fill="url(#dots)" />
+                <path d="M0 130 C80 125 160 100 240 60 C320 20 370 8 400 2 L400 140 L0 140 Z" fill="url(#curveGrad)" />
+                <path d="M0 130 C80 125 160 100 240 60 C320 20 370 8 400 2" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="400" cy="2" r="4" fill="#D4AF37" />
+                <circle cx="400" cy="2" r="8" fill="#D4AF37" fillOpacity="0.2" />
+              </svg>
             </div>
 
             {/* Card 5 — normal */}
@@ -389,15 +389,19 @@ export default function RecursosPage() {
               <p className="text-neutral-400 text-sm leading-relaxed mb-8">
                 Materiais para acompanhar sua evolução com clareza.
               </p>
-              <div className="mt-auto space-y-2">
-                <div className="flex justify-between text-xs text-neutral-500 mb-1">
-                  <span>Hoje</span>
-                  <span className="text-[#D4AF37]">Meta</span>
+              <div className="mt-6">
+                <div className="flex justify-between text-[11px] mb-2">
+                  <span className="text-[#555] font-bold uppercase tracking-[0.1em]">Início</span>
+                  <span className="text-[#D4AF37] font-bold">65% lá</span>
+                  <span className="text-[#555] font-bold uppercase tracking-[0.1em]">Meta</span>
                 </div>
-                <div className="h-2 bg-neutral-800 rounded-full overflow-hidden">
-                  <div className="h-full w-[62%] bg-gradient-to-r from-[#D4AF37] to-[#C5A028] rounded-full" />
+                <div className="relative h-[6px] bg-[#1A1A1A] rounded-full">
+                  <div className="absolute top-0 left-0 h-full bg-[#D4AF37] rounded-full" style={{ width: "65%" }} />
+                  <div
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#D4AF37] border-2 border-[#000]"
+                    style={{ left: "65%" }}
+                  />
                 </div>
-                <p className="text-xs text-neutral-600 text-right">62% do caminho</p>
               </div>
             </div>
 
@@ -407,10 +411,10 @@ export default function RecursosPage() {
               <p className="text-neutral-400 text-sm leading-relaxed mb-8">
                 Desenvolvimento pessoal com ética, consciência e intenção real.
               </p>
-              <div className="mt-auto">
-                <p className="text-3xl font-black text-[#D4AF37] leading-tight">Propósito</p>
-                <p className="text-xl font-bold text-neutral-400 leading-tight">Clareza</p>
-                <p className="text-base font-semibold text-neutral-600 leading-tight">Ação</p>
+              <div className="mt-6 flex flex-col gap-1">
+                <span className="text-[20px] font-black text-[#333]">Propósito</span>
+                <span className="text-[32px] font-black text-[#555]">Clareza</span>
+                <span className="text-[48px] font-black text-[#D4AF37] leading-none">Ação</span>
               </div>
             </div>
 
@@ -437,8 +441,14 @@ export default function RecursosPage() {
               <div className="relative bg-gradient-to-br from-neutral-900 to-black border border-neutral-800 rounded-2xl p-8 h-full flex flex-col group-hover:border-[#D4AF37]/50 transition-all duration-300">
 
                 <div className="w-14 h-14 bg-[#D4AF37]/10 rounded-2xl flex items-center justify-center mb-6">
-                  <svg className="w-7 h-7 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#D4AF37" strokeWidth="1.5">
+                    <rect x="8" y="2" width="24" height="36" rx="4" />
+                    <line x1="8" y1="8" x2="32" y2="8" />
+                    <line x1="8" y1="32" x2="32" y2="32" />
+                    <circle cx="20" cy="35" r="1.5" fill="#D4AF37" />
+                    <line x1="14" y1="13" x2="26" y2="13" strokeLinecap="round" />
+                    <line x1="14" y1="17" x2="22" y2="17" strokeLinecap="round" />
+                    <rect x="14" y="21" width="12" height="7" rx="1.5" strokeWidth="1" />
                   </svg>
                 </div>
 
@@ -472,8 +482,13 @@ export default function RecursosPage() {
               <div className="relative bg-gradient-to-br from-neutral-900 to-black border border-neutral-800 rounded-2xl p-8 h-full flex flex-col group-hover:border-[#D4AF37]/50 transition-all duration-300">
 
                 <div className="w-14 h-14 bg-[#D4AF37]/10 rounded-2xl flex items-center justify-center mb-6">
-                  <svg className="w-7 h-7 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#D4AF37" strokeWidth="1.5">
+                    <path d="M6 32V8a2 2 0 012-2h18a2 2 0 012 2v24" />
+                    <path d="M6 32a2 2 0 012-2h20v4H8a2 2 0 01-2-2z" />
+                    <line x1="14" y1="11" x2="24" y2="11" strokeLinecap="round" />
+                    <line x1="14" y1="15" x2="24" y2="15" strokeLinecap="round" />
+                    <line x1="14" y1="19" x2="20" y2="19" strokeLinecap="round" />
+                    <path d="M24 6v16l3-2 3 2V6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
 
@@ -509,13 +524,7 @@ export default function RecursosPage() {
       </section>
 
       {/* ── CTA FINAL ─────────────────────────────────────────────────────── */}
-      <section
-        className="py-8 px-4 sm:px-6 lg:px-16"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(212,175,55,0.08) 0%, transparent 70%), #000000",
-        }}
-      >
+      <section className="py-8 px-4 sm:px-6 lg:px-16" style={{ background: "#000000" }}>
         <div className="max-w-[1600px] mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-16">
 
@@ -531,7 +540,7 @@ export default function RecursosPage() {
             <div className="flex flex-row gap-4 flex-shrink-0">
               <button
                 onClick={scrollToMateriais}
-                className="px-8 py-4 bg-transparent border border-neutral-600 text-white rounded-xl font-bold hover:border-neutral-400 transition-all duration-300 hover:scale-105 whitespace-nowrap"
+                className="px-8 py-4 bg-white text-black rounded-xl font-bold hover:bg-neutral-100 transition-all duration-300 hover:scale-105 whitespace-nowrap"
               >
                 Escolher meu material
               </button>
